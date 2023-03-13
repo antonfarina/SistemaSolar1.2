@@ -130,7 +130,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="definiciones.h" />
-    <ClInclude Include="esfera.h" />
     <ClInclude Include="funciones_ejes.h" />
   </ItemGroup>
   <ItemGroup>

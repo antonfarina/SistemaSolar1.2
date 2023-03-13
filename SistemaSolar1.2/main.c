@@ -7,10 +7,11 @@
 #include <math.h>
 #include "definiciones.h"
 #include "funciones_ejes.h"
-#include "esfera.h"
 
 const int ANCHO_VENTANA = 700;
 const int ALTO_VENTANA = 700;
+
+extern int arrayEsfera();
 //lista esfera
 unsigned int esfera;
 
@@ -28,6 +29,7 @@ planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 76, 137, 212};
 //satelites de la tierra
 planeta luna = { 80, 10, 0, 15, 0, 10, 255, 255, 255};
 planeta ISS = { 120, 7, 0, 12, 0, 9, 200, 100, 97};
+
 
 //funcion que actualiza el angulo de rotacion y translacion de un planeta
 void suma_angulo(planeta* p) {
