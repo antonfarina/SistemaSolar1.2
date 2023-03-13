@@ -18,14 +18,14 @@ void suma_angulo(planeta p);
 
 //datos: distancia al sol, velocidad de translacion, angulo de translacion, velocidad de rotacion, angulo de rotacion, tamaño
 planeta sol = {0, 0, 0, 0, 0, 100};
-planeta mercurio = {150, 2, 0, 0, 0, 20};
-planeta venus = {250, 10, 150, 10, 0, 35};
-planeta tierra = {450, 4, 0, 9, 0, 40};
-planeta marte = {650, 3.7, 120, 10, 0, 30};
-planeta jupiter = {850, 5, 0, 0, 0, 60};
-planeta saturno = {1050, 6, 10, 10, 0, 50};
-planeta urano = {1250, 8, 26, 10, 0, 45};
-planeta neptuno = {1400, 2.5, 0, 10, 0, 45};
+planeta mercurio = {180, 10, 0, 0, 0, 25};
+planeta venus = {280, 8, 150, 5.2, 0, 35};
+planeta tierra = {450, 7, 0, 9, 0, 40};
+planeta marte = {650, 6, 120, 10, 0, 35};
+planeta jupiter = {800, 5, 0, 0, 0, 60};
+planeta saturno = {1050, 4.4, 10, 9, 0, 50};
+planeta urano = {1250, 3.7, 26, 6, 0, 45};
+planeta neptuno = {1400, 2.5, 160, 11, 0, 45};
 
 //satelites de la tierra
 planeta luna = { 80, 10, 0, 15, 0, 10 };
@@ -60,7 +60,7 @@ void dibuja_ejes() {
 }
 
 //funcion de dibujo de los planetas
-void dibuja_planeta(planeta p) {
+void dibuja_planeta(planeta p, GLfloat R, GLfloat G, GLfloat B) {
 	glPushMatrix();
 	//rotamos alrededor del sol
 	glRotatef(p.angulo_translacion, 0, 1, 0);
@@ -72,7 +72,8 @@ void dibuja_planeta(planeta p) {
 	//escalamnos
 	glScalef(p.tamano, p.tamano, p.tamano);
 	dibuja_ejes();
-	glColor3f(1.0f, 1.0f, 0.0f);
+	//colores
+	glColor3f(R/255, G/255, B/255);
 	//dibujamos el planeta
 	glCallList(esfera);
 	glPopMatrix();
@@ -96,9 +97,9 @@ void Display(void) {
 	glScalef(100, 100, 100);
 	dibuja_ejes();
 	glPopMatrix();
-	dibuja_planeta(sol);
-	dibuja_planeta(mercurio);
-	dibuja_planeta(venus);
+	dibuja_planeta(sol, 255, 171, 25);
+	dibuja_planeta(mercurio, 148, 108, 68);
+	dibuja_planeta(venus, 227, 172, 61);
 
 	//TIERRA, LUNA Y ISS
 	glPushMatrix();
@@ -146,11 +147,11 @@ void Display(void) {
 		glPopMatrix();
 	glPopMatrix();
 
-	dibuja_planeta(marte);
-	dibuja_planeta(jupiter);
-	dibuja_planeta(saturno);
-	dibuja_planeta(urano);
-	dibuja_planeta(neptuno);
+	dibuja_planeta(marte, 232, 71, 46);
+	dibuja_planeta(jupiter, 227, 211, 163);
+	dibuja_planeta(saturno, 169, 151, 204);
+	dibuja_planeta(urano, 50, 156, 120);
+	dibuja_planeta(neptuno, 76, 137, 212);
 
 	// Se limpian los buffers
 	glutSwapBuffers();
