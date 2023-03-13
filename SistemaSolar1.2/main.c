@@ -14,22 +14,22 @@ const int ALTO_VENTANA = 700;
 unsigned int esfera;
 
 //no funciona
-void suma_angulo(planeta p);
+void suma_angulo(planeta *p);
 
 //datos: distancia al sol, velocidad de translacion, angulo de translacion, velocidad de rotacion, angulo de rotacion, tamaño
-planeta sol = {0, 0, 0, 0, 0, 100};
-planeta mercurio = {180, 10, 0, 0, 0, 25};
-planeta venus = {280, 8, 150, 5.2, 0, 35};
+planeta sol = {0, 0, 0, 0, 0, 100, 255, 171, 25};
+planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
+planeta venus = {280, 8, 150, 5.2, 0, 35, 227, 172, 61};
 planeta tierra = {450, 7, 0, 9, 0, 40};
-planeta marte = {650, 6, 120, 10, 0, 35};
-planeta jupiter = {800, 5, 0, 0, 0, 60};
-planeta saturno = {1050, 4.4, 10, 9, 0, 50};
-planeta urano = {1250, 3.7, 26, 6, 0, 45};
-planeta neptuno = {1400, 2.5, 160, 11, 0, 45};
+planeta marte = {650, 6, 120, 10, 0, 35, 232, 71, 46 };
+planeta jupiter = {800, 5, 0, 0, 0, 60, 227, 211, 163};
+planeta saturno = {1050, 4.4, 10, 9, 0, 50, 169, 151, 204};
+planeta urano = {1250, 3.7, 26, 6, 0, 45, 50, 156, 120};
+planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 76, 137, 212};
 
 //satelites de la tierra
-planeta luna = { 80, 10, 0, 15, 0, 10 };
-planeta ISS = { 120, 7, 0, 12, 0, 9 };
+planeta luna = { 80, 10, 0, 15, 0, 10, 255, 255, 255};
+planeta ISS = { 120, 7, 0, 12, 0, 9, 200, 100, 97};
 
 //funcion de dibujo de los ejes
 void dibuja_ejes() {
@@ -60,7 +60,7 @@ void dibuja_ejes() {
 }
 
 //funcion de dibujo de los planetas
-void dibuja_planeta(planeta p, GLfloat R, GLfloat G, GLfloat B) {
+void dibuja_planeta(planeta p) {
 	glPushMatrix();
 	//rotamos alrededor del sol
 	glRotatef(p.angulo_translacion, 0, 1, 0);
@@ -73,7 +73,7 @@ void dibuja_planeta(planeta p, GLfloat R, GLfloat G, GLfloat B) {
 	glScalef(p.tamano, p.tamano, p.tamano);
 	dibuja_ejes();
 	//colores
-	glColor3f(R/255, G/255, B/255);
+	glColor3f(p.color_R/255, p.color_G/255, p.color_B/255);
 	//dibujamos el planeta
 	glCallList(esfera);
 	glPopMatrix();
@@ -97,9 +97,9 @@ void Display(void) {
 	glScalef(100, 100, 100);
 	dibuja_ejes();
 	glPopMatrix();
-	dibuja_planeta(sol, 255, 171, 25);
-	dibuja_planeta(mercurio, 148, 108, 68);
-	dibuja_planeta(venus, 227, 172, 61);
+	dibuja_planeta(sol);
+	dibuja_planeta(mercurio);
+	dibuja_planeta(venus);
 
 	//TIERRA, LUNA Y ISS
 	glPushMatrix();
@@ -128,6 +128,7 @@ void Display(void) {
 				dibuja_ejes();
 				//escalamos a su posicion
 				glScalef(luna.tamano, luna.tamano, luna.tamano);
+				glColor3f(luna.color_R / 255, luna.color_G / 255, luna.color_B / 255);
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
@@ -142,16 +143,17 @@ void Display(void) {
 			dibuja_ejes();
 			//escalamos a su posicion
 			glScalef(ISS.tamano, ISS.tamano, ISS.tamano);
+			glColor3f(ISS.color_R / 255, ISS.color_G / 255, ISS.color_B / 255);
 			glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
 
-	dibuja_planeta(marte, 232, 71, 46);
-	dibuja_planeta(jupiter, 227, 211, 163);
-	dibuja_planeta(saturno, 169, 151, 204);
-	dibuja_planeta(urano, 50, 156, 120);
-	dibuja_planeta(neptuno, 76, 137, 212);
+	dibuja_planeta(marte);
+	dibuja_planeta(jupiter);
+	dibuja_planeta(saturno);
+	dibuja_planeta(urano);
+	dibuja_planeta(neptuno);
 
 	// Se limpian los buffers
 	glutSwapBuffers();
@@ -165,61 +167,17 @@ void Idle(void) {
 
 //funcion de movimiento de los planetas
 void movimiento() {
-	//actualizacion de los angulos
-	sol.angulo_translacion += sol.velocidad_translacion;
-	if (sol.angulo_translacion > 360)sol.angulo_translacion += -360;
-	sol.angulo_rotacion += sol.velocidad_rotacion;
-	if (sol.angulo_rotacion > 360)sol.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	mercurio.angulo_translacion += mercurio.velocidad_translacion;
-	if (mercurio.angulo_translacion > 360)mercurio.angulo_translacion += -360;
-	mercurio.angulo_rotacion += mercurio.velocidad_rotacion;
-	if (mercurio.angulo_rotacion > 360)mercurio.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	venus.angulo_translacion += venus.velocidad_translacion;
-	if (venus.angulo_translacion > 360)venus.angulo_translacion += -360;
-	venus.angulo_rotacion += venus.velocidad_rotacion;
-	if (venus.angulo_rotacion > 360)venus.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	tierra.angulo_translacion += tierra.velocidad_translacion;
-	if (tierra.angulo_translacion > 360)tierra.angulo_translacion += -360;
-	tierra.angulo_rotacion += tierra.velocidad_rotacion;
-	if (tierra.angulo_rotacion > 360)tierra.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	luna.angulo_translacion += luna.velocidad_translacion;
-	if (luna.angulo_translacion > 360)luna.angulo_translacion += -360;
-	luna.angulo_rotacion += luna.velocidad_rotacion;
-	if (luna.angulo_rotacion > 360)luna.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	ISS.angulo_translacion += ISS.velocidad_translacion;
-	if (ISS.angulo_translacion > 360)ISS.angulo_translacion += -360;
-	ISS.angulo_rotacion += ISS.velocidad_rotacion;
-	if (ISS.angulo_rotacion > 360)ISS.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	marte.angulo_translacion += marte.velocidad_translacion;
-	if (marte.angulo_translacion > 360)marte.angulo_translacion += -360;
-	marte.angulo_rotacion += marte.velocidad_rotacion;
-	if (marte.angulo_rotacion > 360)marte.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	jupiter.angulo_translacion += jupiter.velocidad_translacion;
-	if (jupiter.angulo_translacion > 360)jupiter.angulo_translacion += -360;
-	jupiter.angulo_rotacion += jupiter.velocidad_rotacion;
-	if (jupiter.angulo_rotacion > 360)jupiter.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	saturno.angulo_translacion += saturno.velocidad_translacion;
-	if (saturno.angulo_translacion > 360)saturno.angulo_translacion += -360;
-	saturno.angulo_rotacion += saturno.velocidad_rotacion;
-	if (saturno.angulo_rotacion > 360)saturno.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	urano.angulo_translacion += urano.velocidad_translacion;
-	if (urano.angulo_translacion > 360)urano.angulo_translacion += -360;
-	urano.angulo_rotacion += urano.velocidad_rotacion;
-	if (urano.angulo_rotacion > 360)urano.angulo_rotacion += -360;
-	//actualizacion de los angulos
-	neptuno.angulo_translacion += neptuno.velocidad_translacion;
-	if (neptuno.angulo_translacion > 360)neptuno.angulo_translacion += -360;
-	neptuno.angulo_rotacion += neptuno.velocidad_rotacion;
-	if (neptuno.angulo_rotacion > 360)neptuno.angulo_rotacion += -360;
+	suma_angulo(&sol);
+	suma_angulo(&mercurio);
+	suma_angulo(&venus);
+	suma_angulo(&tierra);
+	suma_angulo(&luna);
+	suma_angulo(&ISS);
+	suma_angulo(&marte);
+	suma_angulo(&jupiter);
+	suma_angulo(&saturno);
+	suma_angulo(&urano);
+	suma_angulo(&neptuno);
 	//redibujamos
 	glutPostRedisplay();
 	//reejecutamos cada TIEMPO ms
@@ -256,7 +214,7 @@ int main(int argc, char** argv) {
 	//Funcion de dibujo
 	glutDisplayFunc(Display);
 	//Funcion de actualizacion
-	//glutIdleFunc(Idle);
+	glutIdleFunc(Idle);
 
 	openGlInit();
 	movimiento();
@@ -266,11 +224,11 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-//no funciona
-void suma_angulo(planeta p) {
-	p.angulo_translacion += p.velocidad_translacion;
-	if (p.angulo_translacion > 360)p.angulo_translacion += -360;
-	p.angulo_rotacion += p.velocidad_rotacion;
-	if (p.angulo_rotacion > 360)p.angulo_rotacion += -360;
+//funcion que actualiza el angulo de rotacion y translacion de un planeta
+void suma_angulo(planeta *p) {
+	p->angulo_translacion += p->velocidad_translacion;
+	if (p->angulo_translacion > 360)p->angulo_translacion += -360;
+	p->angulo_rotacion += p->velocidad_rotacion;
+	if (p->angulo_rotacion > 360)p->angulo_rotacion += -360;
 	glutPostRedisplay();
 }

@@ -10,4 +10,7 @@ typedef struct {
 	float velocidad_rotacion;
 	float angulo_rotacion;
 	int tamano;
+	float color_R;
+	float color_G;
+	float color_B;
 }planeta;

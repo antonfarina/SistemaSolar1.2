@@ -7,7 +7,7 @@
 
 
 float alpha = PI/2;
-float beta = PI / 2;
+float beta = PI/2;
 
 void moverCamara() {
 	//configuracion de la matriz de proyeccion
