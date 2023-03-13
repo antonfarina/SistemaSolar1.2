@@ -1,6 +1,6 @@
 #define DISTANCIA 1500
 #define INCREMENTO .01
-#define PI 3.1415
+#define PI 3.141592
 
 void moverCamara();
 

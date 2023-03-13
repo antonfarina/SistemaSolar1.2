@@ -6,7 +6,9 @@
 #include "funciones_ejes.h"
 
 
-float alpha = PI/2;
+//float alpha = 0;
+//float beta = 0;
+float alpha = 0;
 float beta = PI/2;
 
 void moverCamara() {
@@ -15,7 +17,8 @@ void moverCamara() {
 	//cargamos la identidad
 	glLoadIdentity();
 	//modificamos la vision (el cubo 1x1x1 a DISTACIAxDISTANCIAxDISTANCIA)
-	glOrtho(-DISTANCIA, DISTANCIA, -DISTANCIA, DISTANCIA, -DISTANCIA, DISTANCIA);
+	glOrtho(-DISTANCIA, DISTANCIA, -DISTANCIA, DISTANCIA, DISTANCIA, -DISTANCIA*10);
+	//enfocamos la camara
 	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),
 		((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, 1, 0);
 }
@@ -38,7 +41,6 @@ void teclasEspeciales(int cursor, int x, int y){
 		//Giros:
 	case GLUT_KEY_UP:
 		beta -= INCREMENTO;
-		printf("pulsado");
 		break;
 	case GLUT_KEY_DOWN:
 		beta += INCREMENTO;

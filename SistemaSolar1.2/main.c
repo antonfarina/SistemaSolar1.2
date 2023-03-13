@@ -4,6 +4,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <stdio.h>
+#include <math.h>
 #include "definiciones.h"
 #include "funciones_ejes.h"
 #include "esfera.h"
@@ -13,10 +14,7 @@ const int ALTO_VENTANA = 700;
 //lista esfera
 unsigned int esfera;
 
-//no funciona
-void suma_angulo(planeta *p);
-
-//datos: distancia al sol, velocidad de translacion, angulo de translacion, velocidad de rotacion, angulo de rotacion, tamaño
+//datos: distancia al sol, velocidad de translacion, angulo de translacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB
 planeta sol = {0, 0, 0, 0, 0, 100, 255, 171, 25};
 planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
 planeta venus = {280, 8, 150, 5.2, 0, 35, 227, 172, 61};
@@ -30,6 +28,31 @@ planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 76, 137, 212};
 //satelites de la tierra
 planeta luna = { 80, 10, 0, 15, 0, 10, 255, 255, 255};
 planeta ISS = { 120, 7, 0, 12, 0, 9, 200, 100, 97};
+
+//funcion que actualiza el angulo de rotacion y translacion de un planeta
+void suma_angulo(planeta* p) {
+	p->angulo_translacion += p->velocidad_translacion;
+	if (p->angulo_translacion > 360)p->angulo_translacion += -360;
+	p->angulo_rotacion += p->velocidad_rotacion;
+	if (p->angulo_rotacion > 360)p->angulo_rotacion += -360;
+	glutPostRedisplay();
+}
+
+void dibuja_orbita(float radio) {
+	float x, z;
+	//dibujamos en un lazo
+	glBegin(GL_LINE_LOOP);
+	for (int i = 0; i < 100; i++) {
+		//componente x
+		x = radio * cos(2.0 * PI * i / 100.0);
+		//componene z
+		z = radio * sin(2.0 * PI * i / 100.0);
+		glColor3f(1.0f, 1.0f, 1.0f);
+		//la componente y=0
+		glVertex3f(x, 0.0, z);
+	}
+	glEnd();
+}
 
 //funcion de dibujo de los ejes
 void dibuja_ejes() {
@@ -78,13 +101,14 @@ void dibuja_planeta(planeta p) {
 	glCallList(esfera);
 	glPopMatrix();
 	glPopMatrix();
+	//dibujamos la orbita
+	dibuja_orbita(p.distancia_sol);
 }
 
 // Función de display
 void Display(void) {
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	//funcion de movimiento de la camara con las teclas del teclado
 	moverCamara();
 	// Se activa la matriz del modelador
@@ -117,6 +141,7 @@ void Display(void) {
 			//dibujamos el planeta
 			glCallList(esfera);
 		glPopMatrix();
+		
 		glPushMatrix();
 			//rotamos alrededor de la tierra
 			glRotatef(luna.angulo_translacion, 0, 1, 0);
@@ -132,6 +157,7 @@ void Display(void) {
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
+		dibuja_orbita(luna.distancia_sol);
 		glPushMatrix();
 		//rotamos alrededor de la tierra
 		glRotatef(-ISS.angulo_translacion, 0, 1, 0);
@@ -147,14 +173,41 @@ void Display(void) {
 			glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
+		dibuja_orbita(ISS.distancia_sol);
 	glPopMatrix();
+	dibuja_orbita(tierra.distancia_sol);
 
 	dibuja_planeta(marte);
 	dibuja_planeta(jupiter);
-	dibuja_planeta(saturno);
+	/*dibuja_planeta(saturno);*/
+
+	glPushMatrix();
+	//rotamos alrededor del sol
+	glRotatef(saturno.angulo_translacion, 0, 1, 0);
+	//trasladamos el planteta a su posicion
+	glTranslatef(saturno.distancia_sol, 0, 0);
+	glPushMatrix();
+	//rotamos sobre si mismo
+	glRotatef(saturno.angulo_rotacion, 0, 1, 0);
+	//escalamnos
+	glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
+	dibuja_ejes();
+	//colores
+	glColor3f(saturno.color_R / 255, saturno.color_G / 255, saturno.color_B / 255);
+	//dibujamos el planeta
+	glCallList(esfera);
+	glPopMatrix();
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	//anillo de saturno
+	glScalef(saturno.tamano*1.5, saturno.tamano * 0.1, saturno.tamano*1.5);
+	glCallList(esfera);
+	glPopMatrix();
+	//dibujamos la orbita
+	dibuja_orbita(saturno.distancia_sol);
+
 	dibuja_planeta(urano);
 	dibuja_planeta(neptuno);
-
 	// Se limpian los buffers
 	glutSwapBuffers();
 	glFlush();
@@ -222,13 +275,4 @@ int main(int argc, char** argv) {
 	//Lazo principal
 	glutMainLoop();
 	return 0;
-}
-
-//funcion que actualiza el angulo de rotacion y translacion de un planeta
-void suma_angulo(planeta *p) {
-	p->angulo_translacion += p->velocidad_translacion;
-	if (p->angulo_translacion > 360)p->angulo_translacion += -360;
-	p->angulo_rotacion += p->velocidad_rotacion;
-	if (p->angulo_rotacion > 360)p->angulo_rotacion += -360;
-	glutPostRedisplay();
 }
