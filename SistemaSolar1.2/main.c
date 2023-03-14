@@ -1,11 +1,9 @@
 #include <windows.h>
-
 #include <glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <stdio.h>
 #include <math.h>
-#include "definiciones.h"
 #include "funciones_ejes.h"
 
 const int ANCHO_VENTANA = 700;
@@ -15,29 +13,30 @@ extern int arrayEsfera();
 //lista esfera
 unsigned int esfera;
 
-//datos: distancia al sol, velocidad de translacion, angulo de translacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB
+//datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB
 planeta sol = {0, 0, 0, 0, 0, 100, 255, 171, 25};
 planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
 planeta venus = {280, 8, 150, 5.2, 0, 35, 227, 172, 61};
 planeta tierra = {450, 7, 0, 9, 0, 40};
 planeta marte = {650, 6, 120, 10, 0, 35, 232, 71, 46 };
-planeta jupiter = {800, 5, 0, 0, 0, 60, 227, 211, 163};
-planeta saturno = {1050, 4.4, 10, 9, 0, 50, 169, 151, 204};
+planeta jupiter = {800, 5, 0, 15, 0, 60, 227, 211, 163};
+planeta saturno = {1050, 4.4, 0, 9, 0, 50, 169, 151, 204};
 planeta urano = {1250, 3.7, 26, 6, 0, 45, 50, 156, 120};
 planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 76, 137, 212};
 
 //satelites de la tierra
-planeta luna = { 80, 10, 0, 15, 0, 10, 255, 255, 255};
-planeta ISS = { 120, 7, 0, 12, 0, 9, 200, 100, 97};
+planeta luna = {80, 10, 0, 15, 0, 10, 255, 255, 255};
+planeta ISS = {120, 7, 0, 12, 0, 9, 200, 100, 97};
 
 
-//funcion que actualiza el angulo de rotacion y translacion de un planeta
+//funcion que actualiza el angulo de rotacion y traslacion de un planeta
 void suma_angulo(planeta* p) {
-	p->angulo_translacion += p->velocidad_translacion;
-	if (p->angulo_translacion > 360)p->angulo_translacion += -360;
+	//actualizamos la velocidad de traslacion
+	p->angulo_traslacion += p->velocidad_traslacion;
+	if (p->angulo_traslacion > 360)p->angulo_traslacion += -360;
+	//actualizamos la velocidad de rotacion
 	p->angulo_rotacion += p->velocidad_rotacion;
 	if (p->angulo_rotacion > 360)p->angulo_rotacion += -360;
-	glutPostRedisplay();
 }
 
 void dibuja_orbita(float radio) {
@@ -87,21 +86,21 @@ void dibuja_ejes() {
 //funcion de dibujo de los planetas
 void dibuja_planeta(planeta p) {
 	glPushMatrix();
-	//rotamos alrededor del sol
-	glRotatef(p.angulo_translacion, 0, 1, 0);
-	//trasladamos el planteta a su posicion
-	glTranslatef(p.distancia_sol, 0, 0);
-	glPushMatrix();
-	//rotamos sobre si mismo
-	glRotatef(p.angulo_rotacion, 0, 1, 0);
-	//escalamnos
-	glScalef(p.tamano, p.tamano, p.tamano);
-	dibuja_ejes();
-	//colores
-	glColor3f(p.color_R/255, p.color_G/255, p.color_B/255);
-	//dibujamos el planeta
-	glCallList(esfera);
-	glPopMatrix();
+		//rotamos alrededor del sol
+		glRotatef(p.angulo_traslacion, 0, 1, 0);
+		//trasladamos el planteta a su posicion
+		glTranslatef(p.distancia_sol, 0, 0);
+		glPushMatrix();
+			//rotamos sobre si mismo
+			glRotatef(p.angulo_rotacion, 0, 1, 0);
+			//escalamnos
+			glScalef(p.tamano, p.tamano, p.tamano);
+			dibuja_ejes();
+			//colores
+			glColor3f(p.color_R/255, p.color_G/255, p.color_B/255);
+			//dibujamos el planeta
+			glCallList(esfera);
+		glPopMatrix();
 	glPopMatrix();
 	//dibujamos la orbita
 	dibuja_orbita(p.distancia_sol);
@@ -123,14 +122,17 @@ void Display(void) {
 	glScalef(100, 100, 100);
 	dibuja_ejes();
 	glPopMatrix();
+	//dibujamos el sol
 	dibuja_planeta(sol);
+	//dibujamos mercurio
 	dibuja_planeta(mercurio);
+	//dibujamos venus
 	dibuja_planeta(venus);
 
 	//TIERRA, LUNA Y ISS
 	glPushMatrix();
 		//rotamos alrededor del sol
-		glRotatef(tierra.angulo_translacion, 0, 1, 0);
+		glRotatef(tierra.angulo_traslacion, 0, 1, 0);
 		//trasladamos el planteta a su posicion
 		glTranslatef(tierra.distancia_sol, 0, 0);
 		glPushMatrix();
@@ -146,7 +148,7 @@ void Display(void) {
 		
 		glPushMatrix();
 			//rotamos alrededor de la tierra
-			glRotatef(luna.angulo_translacion, 0, 1, 0);
+			glRotatef(luna.angulo_traslacion, 0, 1, 0);
 			//trasladamos el la luna a su posicion
 			glTranslatef(luna.distancia_sol, 0, 0);
 			glPushMatrix();
@@ -162,7 +164,7 @@ void Display(void) {
 		dibuja_orbita(luna.distancia_sol);
 		glPushMatrix();
 		//rotamos alrededor de la tierra
-		glRotatef(-ISS.angulo_translacion, 0, 1, 0);
+		glRotatef(-ISS.angulo_traslacion, 0, 1, 0);
 		//trasladamos el la luna a su posicion
 		glTranslatef(ISS.distancia_sol, 0, 0);
 			glPushMatrix();
@@ -181,34 +183,36 @@ void Display(void) {
 
 	dibuja_planeta(marte);
 	dibuja_planeta(jupiter);
-	/*dibuja_planeta(saturno);*/
 
+	//dibujo de saturno con sus anillos
 	glPushMatrix();
-	//rotamos alrededor del sol
-	glRotatef(saturno.angulo_translacion, 0, 1, 0);
-	//trasladamos el planteta a su posicion
-	glTranslatef(saturno.distancia_sol, 0, 0);
-	glPushMatrix();
-	//rotamos sobre si mismo
-	glRotatef(saturno.angulo_rotacion, 0, 1, 0);
-	//escalamnos
-	glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
-	dibuja_ejes();
-	//colores
-	glColor3f(saturno.color_R / 255, saturno.color_G / 255, saturno.color_B / 255);
-	//dibujamos el planeta
-	glCallList(esfera);
-	glPopMatrix();
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	//anillo de saturno
-	glScalef(saturno.tamano*1.5, saturno.tamano * 0.1, saturno.tamano*1.5);
-	glCallList(esfera);
+		//rotamos alrededor del sol
+		glRotatef(saturno.angulo_traslacion, 0.0f, 1.0f, 0.0f);
+		//trasladamos el planteta a su posicion
+		glTranslatef(saturno.distancia_sol, 0.0f, 0.0f);
+			glPushMatrix();
+				//rotamos sobre si mismo
+				glRotatef(saturno.angulo_rotacion, 0.0f, 1.0f, 0.0f);
+				//escalamnos
+				glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
+				dibuja_ejes();
+				//colores
+				glColor3f(saturno.color_R / 255, saturno.color_G / 255, saturno.color_B / 255);
+				//dibujamos el planeta
+				glCallList(esfera);
+			glPopMatrix();
+		//blanco
+		glColor3f(1.0f, 1.0f, 1.0f);
+		//rotamos el anillo 
+		glRotatef(90, 1.0f ,0.0f ,0.0f);
+		//usamos un toro de anillo
+		glutWireTorus(8.0f, 75.0f, 20, 20);
 	glPopMatrix();
 	//dibujamos la orbita
 	dibuja_orbita(saturno.distancia_sol);
-
+	//dibujamos urano
 	dibuja_planeta(urano);
+	//dibujamos neptuno
 	dibuja_planeta(neptuno);
 	// Se limpian los buffers
 	glutSwapBuffers();

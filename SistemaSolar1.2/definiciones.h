@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-#define TIEMPO 50
+//tiempo cada el que se actualizan los giros
+#define TIEMPO 60
 
 //estructura para los cuerpos celestes
 typedef struct {
