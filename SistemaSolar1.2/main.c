@@ -262,6 +262,7 @@ void usar_menu(int opcion) {
 }
 
 void menu(void) {
+	//creacion del menu
 	int menu;
 	menu = glutCreateMenu(usar_menu);
 	glutAddMenuEntry("Alejada", 1);
