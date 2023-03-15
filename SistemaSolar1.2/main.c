@@ -26,7 +26,7 @@ planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 76, 137, 212};
 
 //satelites de la tierra
 planeta luna = {80, 10, 0, 15, 0, 10, 255, 255, 255};
-planeta ISS = {120, 7, 0, 12, 0, 9, 200, 100, 97};
+planeta ISS = {120, 15, 0, 12, 0, 9, 200, 100, 97};
 
 
 //funcion que actualiza el angulo de rotacion y traslacion de un planeta
@@ -106,30 +106,8 @@ void dibuja_planeta(planeta p) {
 	dibuja_orbita(p.distancia_sol);
 }
 
-// Función de display
-void Display(void) {
-	// Clear the window with current clearing color
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//funcion de movimiento de la camara con las teclas del teclado
-	moverCamara();
-	// Se activa la matriz del modelador
-	glMatrixMode(GL_MODELVIEW);
-	// Inicializamos la matriz del modelo a la identidad
-	glLoadIdentity();
-	//dibujo de los planetas y ejes
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glPushMatrix();
-	glScalef(100, 100, 100);
-	dibuja_ejes();
-	glPopMatrix();
-	//dibujamos el sol
-	dibuja_planeta(sol);
-	//dibujamos mercurio
-	dibuja_planeta(mercurio);
-	//dibujamos venus
-	dibuja_planeta(venus);
-
-	//TIERRA, LUNA Y ISS
+void dibuja_tierra() {
+	//dibujo de la tierra
 	glPushMatrix();
 		//rotamos alrededor del sol
 		glRotatef(tierra.angulo_traslacion, 0, 1, 0);
@@ -145,7 +123,8 @@ void Display(void) {
 			//dibujamos el planeta
 			glCallList(esfera);
 		glPopMatrix();
-		
+
+		//dibujo de la luna
 		glPushMatrix();
 			//rotamos alrededor de la tierra
 			glRotatef(luna.angulo_traslacion, 0, 1, 0);
@@ -162,54 +141,80 @@ void Display(void) {
 			glPopMatrix();
 		glPopMatrix();
 		dibuja_orbita(luna.distancia_sol);
+
+		//dibujo de la ISS
 		glPushMatrix();
-		//rotamos alrededor de la tierra
-		glRotatef(-ISS.angulo_traslacion, 0, 1, 0);
-		//trasladamos el la luna a su posicion
-		glTranslatef(ISS.distancia_sol, 0, 0);
+			//rotamos alrededor de la tierra
+			glRotatef(-ISS.angulo_traslacion, 0, 1, 0);
+			//trasladamos el la luna a su posicion
+			glTranslatef(ISS.distancia_sol, 0, 0);
 			glPushMatrix();
-			//rotamos alrededor de si misma
-			glRotatef(ISS.angulo_rotacion, 0, 1, 0);
-			dibuja_ejes();
-			//escalamos a su posicion
-			glScalef(ISS.tamano, ISS.tamano, ISS.tamano);
-			glColor3f(ISS.color_R / 255, ISS.color_G / 255, ISS.color_B / 255);
-			glCallList(esfera);
+				//rotamos alrededor de si misma
+				glRotatef(ISS.angulo_rotacion, 0, 1, 0);
+				dibuja_ejes();
+				//escalamos a su posicion
+				glScalef(ISS.tamano, ISS.tamano, ISS.tamano);
+				glColor3f(ISS.color_R / 255, ISS.color_G / 255, ISS.color_B / 255);
+				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
 		dibuja_orbita(ISS.distancia_sol);
 	glPopMatrix();
 	dibuja_orbita(tierra.distancia_sol);
+}
 
-	dibuja_planeta(marte);
-	dibuja_planeta(jupiter);
-
+void dibuja_saturno() {
 	//dibujo de saturno con sus anillos
 	glPushMatrix();
-		//rotamos alrededor del sol
-		glRotatef(saturno.angulo_traslacion, 0.0f, 1.0f, 0.0f);
-		//trasladamos el planteta a su posicion
-		glTranslatef(saturno.distancia_sol, 0.0f, 0.0f);
-			glPushMatrix();
-				//rotamos sobre si mismo
-				glRotatef(saturno.angulo_rotacion, 0.0f, 1.0f, 0.0f);
-				//escalamnos
-				glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
-				dibuja_ejes();
-				//colores
-				glColor3f(saturno.color_R / 255, saturno.color_G / 255, saturno.color_B / 255);
-				//dibujamos el planeta
-				glCallList(esfera);
-			glPopMatrix();
-		//blanco
-		glColor3f(1.0f, 1.0f, 1.0f);
-		//rotamos el anillo 
-		glRotatef(90, 1.0f ,0.0f ,0.0f);
-		//usamos un toro de anillo
-		glutWireTorus(8.0f, 75.0f, 20, 20);
+	//rotamos alrededor del sol
+	glRotatef(saturno.angulo_traslacion, 0.0f, 1.0f, 0.0f);
+	//trasladamos el planteta a su posicion
+	glTranslatef(saturno.distancia_sol, 0.0f, 0.0f);
+	glPushMatrix();
+	//rotamos sobre si mismo
+	glRotatef(saturno.angulo_rotacion, 0.0f, 1.0f, 0.0f);
+	//escalamnos
+	glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
+	dibuja_ejes();
+	//colores
+	glColor3f(saturno.color_R / 255, saturno.color_G / 255, saturno.color_B / 255);
+	//dibujamos el planeta
+	glCallList(esfera);
+	glPopMatrix();
+	//blanco
+	glColor3f(1.0f, 1.0f, 1.0f);
+	//rotamos el anillo 
+	glRotatef(90, 1.0f, 0.0f, 0.0f);
+	//usamos un toro de anillo
+	glutWireTorus(8.0f, 75.0f, 20, 20);
 	glPopMatrix();
 	//dibujamos la orbita
 	dibuja_orbita(saturno.distancia_sol);
+}
+// Función de display
+void Display(void) {
+	// Clear the window with current clearing color
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// Se activa la matriz del modelador
+	glMatrixMode(GL_MODELVIEW);
+	// Inicializamos la matriz del modelo a la identidad
+	glLoadIdentity();
+	//dibujo de los planetas y ejes
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPushMatrix();
+	glScalef(100, 100, 100);
+	dibuja_ejes();
+	glPopMatrix();
+	//dibujamos el sol
+	dibuja_planeta(sol);
+	//dibujamos mercurio
+	dibuja_planeta(mercurio);
+	//dibujamos venus
+	dibuja_planeta(venus);
+	dibuja_tierra();
+	dibuja_planeta(marte);
+	dibuja_planeta(jupiter);
+	dibuja_saturno();
 	//dibujamos urano
 	dibuja_planeta(urano);
 	//dibujamos neptuno
@@ -274,10 +279,11 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(Display);
 	//Funcion de actualizacion
 	glutIdleFunc(Idle);
-
+	
 	openGlInit();
 	movimiento();
 	glutKeyboardFunc(teclasEspeciales);
+	moverCamara();
 	//Lazo principal
 	glutMainLoop();
 	return 0;

@@ -19,8 +19,7 @@ void moverCamara() {
 	//modificamos la vision (el cubo 1x1x1 a DISTACIAxDISTANCIAxDISTANCIA)
 	glOrtho(-DISTANCIA, DISTANCIA, -DISTANCIA, DISTANCIA, DISTANCIA, -DISTANCIA*10);
 	//enfocamos la camara
-	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),
-		((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, 1, 0);
+	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, 1, 0);
 }
 
 void teclasEspeciales(int cursor, int x, int y){
