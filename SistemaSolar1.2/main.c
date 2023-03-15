@@ -207,10 +207,9 @@ void dibuja_saturno() {
 	//rotamos el anillo 
 	glRotatef(90, 1.0f, 0.0f, 0.0f);
 	//usamos un toro de anillo
+	glScalef(1, 1,0.25);
 	glutWireTorus(8.0f, 75.0f, 20, 20);
 	glPopMatrix();
-	//dibujamos la orbita
-	//dibuja_orbita(saturno.distancia_sol);
 }
 
 void usar_menu(int opcion) {
@@ -265,7 +264,7 @@ void menu(void) {
 	glutAddMenuEntry("Jupiter", 8);
 	glutAddMenuEntry("Saturno", 9);
 	glutAddMenuEntry("Urano", 10);
-	glutAddMenuEntry("Nepuno", 11);
+	glutAddMenuEntry("Neptuno", 11);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 // Función de display
@@ -277,34 +276,43 @@ void Display(void) {
 		break;
 	case 2:
 		camara = 2;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, mercurio.distancia_sol, mercurio.angulo_traslacion);
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, sol.distancia_sol, sol.angulo_traslacion,0);
 		break;
 	case 3:
 		camara = 3;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, mercurio.distancia_sol, mercurio.angulo_traslacion,0);
 		break;
 	case 4:
 		camara = 4;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, venus.distancia_sol, venus.angulo_traslacion,0);
 		break;
 	case 5:
 		camara = 5;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, luna.distancia_sol, luna.angulo_traslacion,1);
 		break;
 	case 6:
 		camara = 6;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, ISS.distancia_sol, ISS.angulo_traslacion,1);
 		break;
 	case 7:
 		camara = 7;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, marte.distancia_sol, marte.angulo_traslacion,0);
 		break;
 	case 8:
 		camara = 8;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, jupiter.distancia_sol, jupiter.angulo_traslacion,0);
 		break;
 	case 9:
 		camara = 9;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, saturno.distancia_sol, saturno.angulo_traslacion,0);
 		break;
 	case 10:
 		camara = 10;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, urano.distancia_sol, urano.angulo_traslacion,0);
 		break;
 	case 11:
 		camara = 11;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, neptuno.distancia_sol, neptuno.angulo_traslacion,0);
 		break;
 	}
 	// Clear the window with current clearing color
@@ -314,7 +322,7 @@ void Display(void) {
 	// Inicializamos la matriz del modelo a la identidad
 	glLoadIdentity();
 	//dibujo de los planetas y ejes
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glPushMatrix();
 	glScalef(100, 100, 100);
 	dibuja_ejes();

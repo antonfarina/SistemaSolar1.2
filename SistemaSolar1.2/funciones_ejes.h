@@ -29,7 +29,7 @@ typedef struct {
 int get_orbitas();
 int get_movimiento();
 void moverCamara();
-void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto);
+void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite);
 void teclas(unsigned char c, int x, int y);
 void teclasEspeciales(int cursor, int x, int y);
 
