@@ -252,7 +252,7 @@ void usar_menu(int opcion) {
 	glutPostRedisplay();
 }
 
-void menu() {
+void menu(void) {
 	int menu;
 	menu = glutCreateMenu(usar_menu);
 	glutAddMenuEntry("Alejada", 1);
@@ -407,6 +407,7 @@ int main(int argc, char** argv) {
 	glutKeyboardFunc(teclas);
 	glutSpecialFunc(teclasEspeciales);
 	moverCamara();
+	menu();
 	//Lazo principal
 	glutMainLoop();
 	return 0;
