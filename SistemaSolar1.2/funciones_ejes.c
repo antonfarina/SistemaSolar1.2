@@ -25,21 +25,12 @@ void teclas(unsigned char c, int x, int y) {
 	switch (c) {
 		//activacion o desactivacion de las orbitas
 		case 'o':
-			if (flag_orbitas) {
-				flag_orbitas = 0;
-			}else {
-				flag_orbitas = 1;
-			}
+			flag_orbitas = !flag_orbitas;
 			break;
+		//activacion del movimiento
 		case 'p':
-			if (flag_movimiento) {
-				flag_movimiento = 0;
-			}
-			else {
-				flag_movimiento = 1;
-			}
+			flag_movimiento = !flag_movimiento;
 			break;
-
 	}
 }
 
