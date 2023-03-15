@@ -20,6 +20,13 @@ void moverCamara() {
 	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, 1, 0);
 }
 
+void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto){
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45, 1, 1, DISTANCIA * 2);
+	gluLookAt(distancia_visor*cos(angulo_visor*PI/180), -distancia_visor * sin(angulo_visor * PI / 180), 0, distancia_visto * cos(angulo_visto * PI / 180), 0, -1*distancia_visto* sin(angulo_visto * PI / 180), 0, 1, 0);
+}
+
 //funcion que reconoce las teclas
 void teclas(unsigned char c, int x, int y) {
 	switch (c) {

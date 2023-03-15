@@ -12,7 +12,7 @@ const int ALTO_VENTANA = 700;
 extern int arrayEsfera();
 //lista esfera
 unsigned int esfera;
-int camara = 0; 
+int camara = 1; 
 //datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB
 planeta sol = {0, 0, 0, 0, 0, 100, 255, 171, 25};
 planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
@@ -213,15 +213,98 @@ void dibuja_saturno() {
 	//dibuja_orbita(saturno.distancia_sol);
 }
 
+void usar_menu(int opcion) {
+	switch (opcion) {
+		case 1:
+			camara = 1;
+		break;
+		case 2:
+			camara = 2;
+		break;
+		case 3:
+			camara = 3;
+		break;
+		case 4:
+			camara = 4;
+		break;
+		case 5:
+			camara = 5;
+		break;
+		case 6:
+			camara = 6;
+		break;
+		case 7:
+			camara = 7;
+		break;
+		case 8:
+			camara = 8;
+		break;
+		case 9:
+			camara = 9;
+		break;
+		case 10:
+			camara = 10;
+		break;
+		case 11:
+			camara = 11;
+		break;
+	}
+	glutPostRedisplay();
+}
+
+void menu() {
+	int menu;
+	menu = glutCreateMenu(usar_menu);
+	glutAddMenuEntry("Alejada", 1);
+	glutAddMenuEntry("Sol", 2);
+	glutAddMenuEntry("Mercurio", 3);
+	glutAddMenuEntry("Venus", 4);
+	glutAddMenuEntry("Luna", 5);
+	glutAddMenuEntry("ISS", 6);
+	glutAddMenuEntry("Marte", 7);
+	glutAddMenuEntry("Jupiter", 8);
+	glutAddMenuEntry("Saturno", 9);
+	glutAddMenuEntry("Urano", 10);
+	glutAddMenuEntry("Nepuno", 11);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
 // Función de display
 void Display(void) {
 	//switch de la camara
 	switch (camara) {
-	case 0: 
+	case 1: 
 		moverCamara();
 		break;
-	default: 
-		moverCamara();
+	case 2:
+		camara = 2;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, mercurio.distancia_sol, mercurio.angulo_traslacion);
+		break;
+	case 3:
+		camara = 3;
+		break;
+	case 4:
+		camara = 4;
+		break;
+	case 5:
+		camara = 5;
+		break;
+	case 6:
+		camara = 6;
+		break;
+	case 7:
+		camara = 7;
+		break;
+	case 8:
+		camara = 8;
+		break;
+	case 9:
+		camara = 9;
+		break;
+	case 10:
+		camara = 10;
+		break;
+	case 11:
+		camara = 11;
 		break;
 	}
 	// Clear the window with current clearing color
@@ -266,6 +349,7 @@ void Idle(void) {
 
 //funcion de movimiento de los planetas
 void movimiento() {
+	//movemos si esta el flag activado
 	if (get_movimiento()) {
 		suma_angulo(&sol);
 		suma_angulo(&mercurio);
@@ -279,7 +363,6 @@ void movimiento() {
 		suma_angulo(&urano);
 		suma_angulo(&neptuno);
 	}
-
 	//redibujamos
 	glutPostRedisplay();
 	//reejecutamos cada TIEMPO ms
@@ -300,6 +383,7 @@ void openGlInit() {
 	arrayEsfera();
 	glEndList();
 }
+
 
 
 int main(int argc, char** argv) {
