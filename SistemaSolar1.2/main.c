@@ -123,8 +123,6 @@ void dibuja_planeta(planeta p) {
 			glCallList(esfera);
 		glPopMatrix();
 	glPopMatrix();
-	//dibujamos la orbita
-	//dibuja_orbita(p.distancia_sol);
 }
 
 //funcion de dibujo de la tiera con sus satelites
@@ -162,7 +160,7 @@ void dibuja_tierra() {
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
-		dibuja_orbita(luna.distancia_sol);
+		if(get_orbitas())dibuja_orbita(luna.distancia_sol);
 
 		//dibujo de la ISS
 		glPushMatrix();
@@ -180,9 +178,9 @@ void dibuja_tierra() {
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
-		dibuja_orbita(ISS.distancia_sol);
+		//dibujamos las orbitas
+		if (get_orbitas()) dibuja_orbita(ISS.distancia_sol);
 	glPopMatrix();
-	//dibuja_orbita(tierra.distancia_sol);
 }
 
 //funcion de dibujo de saturno y sus anillos
@@ -252,7 +250,10 @@ void Display(void) {
 	dibuja_planeta(urano);
 	//dibujamos neptuno
 	dibuja_planeta(neptuno);
-	dibujar_orbitas();
+	//si el flag esta a 1 dibujamos las orbitas
+	if (get_orbitas() == 1) {
+		dibujar_orbitas();
+	}
 	// Se limpian los buffers
 	glutSwapBuffers();
 	glFlush();
@@ -265,17 +266,20 @@ void Idle(void) {
 
 //funcion de movimiento de los planetas
 void movimiento() {
-	suma_angulo(&sol);
-	suma_angulo(&mercurio);
-	suma_angulo(&venus);
-	suma_angulo(&tierra);
-	suma_angulo(&luna);
-	suma_angulo(&ISS);
-	suma_angulo(&marte);
-	suma_angulo(&jupiter);
-	suma_angulo(&saturno);
-	suma_angulo(&urano);
-	suma_angulo(&neptuno);
+	if (get_movimiento()) {
+		suma_angulo(&sol);
+		suma_angulo(&mercurio);
+		suma_angulo(&venus);
+		suma_angulo(&tierra);
+		suma_angulo(&luna);
+		suma_angulo(&ISS);
+		suma_angulo(&marte);
+		suma_angulo(&jupiter);
+		suma_angulo(&saturno);
+		suma_angulo(&urano);
+		suma_angulo(&neptuno);
+	}
+
 	//redibujamos
 	glutPostRedisplay();
 	//reejecutamos cada TIEMPO ms
@@ -316,6 +320,7 @@ int main(int argc, char** argv) {
 	
 	openGlInit();
 	movimiento();
+	glutKeyboardFunc(teclas);
 	glutSpecialFunc(teclasEspeciales);
 	moverCamara();
 	//Lazo principal

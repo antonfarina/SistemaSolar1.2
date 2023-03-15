@@ -5,11 +5,9 @@
 #include <stdio.h>
 #include "funciones_ejes.h"
 
-
-//float alpha = 0;
-//float beta = 0;
 float alpha = 0;
-float beta = PI/2;
+float beta = 0;
+int flag_orbitas = 1, flag_movimiento = 1;
 
 void moverCamara() {
 	//configuracion de la matriz de proyeccion
@@ -22,6 +20,40 @@ void moverCamara() {
 	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, 1, 0);
 }
 
+//funcion que reconoce las teclas
+void teclas(unsigned char c, int x, int y) {
+	switch (c) {
+		//activacion o desactivacion de las orbitas
+		case 'o':
+			if (flag_orbitas) {
+				flag_orbitas = 0;
+			}else {
+				flag_orbitas = 1;
+			}
+			break;
+		case 'p':
+			if (flag_movimiento) {
+				flag_movimiento = 0;
+			}
+			else {
+				flag_movimiento = 1;
+			}
+			break;
+
+	}
+}
+
+//getter de las orbitas
+int get_orbitas() {
+	return flag_orbitas;
+}
+
+//getter del movimiento
+int get_movimiento() {
+	return flag_movimiento;
+}
+
+//funcion de teclas especiales para mover la camara
 void teclasEspeciales(int cursor, int x, int y){
 	switch (cursor)	{
 		//Traslaciones:
@@ -53,7 +85,9 @@ void teclasEspeciales(int cursor, int x, int y){
 	default:
 		break;
 	}
-	if (alpha >= PI * 2.0 && alpha <= 0) alpha = 0;
-	if (beta >= PI * 2.0 && beta <= 0) beta = 0; //hay que repasarlo para evitar el salto
+	if (alpha >= PI * 2.0 || alpha <= 0) {
+		alpha += -PI * 2.0;
+	}
+	if (beta >= PI * 2.0 || beta <= 0) beta += -PI * 2.0; //hay que repasarlo para evitar el salto
 	glutPostRedisplay();
 }

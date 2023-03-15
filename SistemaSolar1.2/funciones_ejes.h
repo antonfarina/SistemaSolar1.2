@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #define DISTANCIA 1500
-#define INCREMENTO .01
+#define INCREMENTO .02
 //numero pi
 #define PI 3.141592
 //tiempo cada el que se actualizan los giros
@@ -26,6 +26,9 @@ typedef struct {
 	float color_B;
 }planeta;
 
+int get_orbitas();
+int get_movimiento();
 void moverCamara();
-
+void teclas(unsigned char c, int x, int y);
 void teclasEspeciales(int cursor, int x, int y);
+
