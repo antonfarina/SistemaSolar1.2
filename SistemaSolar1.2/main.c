@@ -12,7 +12,7 @@ const int ALTO_VENTANA = 700;
 extern int arrayEsfera();
 //lista esfera
 unsigned int esfera;
-
+int camara = 0; 
 //datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB
 planeta sol = {0, 0, 0, 0, 0, 100, 255, 171, 25};
 planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
@@ -39,6 +39,29 @@ void suma_angulo(planeta* p) {
 	if (p->angulo_rotacion > 360)p->angulo_rotacion += -360;
 }
 
+void dibujar_orbitas() {
+	float x, z;
+	//dibujamos en un lazo
+	glBegin(GL_LINE_LOOP);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	for (int i = 0; i < 100; i++) {
+		//componente x
+		x = mercurio.distancia_sol * cos(2.0 * PI * i / 100.0);
+		//componene z
+		z = mercurio.distancia_sol * sin(2.0 * PI * i / 100.0);
+		//la componente y=0
+		glVertex3f(x, 0.0, z);
+		//componente x
+		x = mercurio.distancia_sol * cos(2.0 * PI * i / 100.0);
+		//componene z
+		z = mercurio.distancia_sol * sin(2.0 * PI * i / 100.0);
+		//la componente y=0
+		glVertex3f(x, 0.0, z);
+	}
+	glEnd();
+}
+
+//funcion que dibuja la orbita de un planeta
 void dibuja_orbita(float radio) {
 	float x, z;
 	//dibujamos en un lazo
@@ -106,6 +129,7 @@ void dibuja_planeta(planeta p) {
 	dibuja_orbita(p.distancia_sol);
 }
 
+//funcion de dibujo de la tiera con sus satelites
 void dibuja_tierra() {
 	//dibujo de la tierra
 	glPushMatrix();
@@ -163,6 +187,7 @@ void dibuja_tierra() {
 	dibuja_orbita(tierra.distancia_sol);
 }
 
+//funcion de dibujo de saturno y sus anillos
 void dibuja_saturno() {
 	//dibujo de saturno con sus anillos
 	glPushMatrix();
@@ -191,8 +216,18 @@ void dibuja_saturno() {
 	//dibujamos la orbita
 	dibuja_orbita(saturno.distancia_sol);
 }
+
 // Función de display
 void Display(void) {
+	//switch de la camara
+	switch (camara) {
+	case 0: 
+		moverCamara();
+		break;
+	default: 
+		moverCamara();
+		break;
+	}
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Se activa la matriz del modelador
@@ -282,7 +317,7 @@ int main(int argc, char** argv) {
 	
 	openGlInit();
 	movimiento();
-	glutKeyboardFunc(teclasEspeciales);
+	glutSpecialFunc(teclasEspeciales);
 	moverCamara();
 	//Lazo principal
 	glutMainLoop();

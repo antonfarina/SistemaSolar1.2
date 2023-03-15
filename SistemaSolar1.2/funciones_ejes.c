@@ -16,8 +16,8 @@ void moverCamara() {
 	glMatrixMode(GL_PROJECTION);
 	//cargamos la identidad
 	glLoadIdentity();
-	//modificamos la vision (el cubo 1x1x1 a DISTACIAxDISTANCIAxDISTANCIA)
-	glOrtho(-DISTANCIA, DISTANCIA, -DISTANCIA, DISTANCIA, DISTANCIA, -DISTANCIA*10);
+	//modificamos la vision
+	glOrtho(-DISTANCIA, DISTANCIA, -DISTANCIA, DISTANCIA, 1, DISTANCIA*2);
 	//enfocamos la camara
 	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, 1, 0);
 }
@@ -53,7 +53,6 @@ void teclasEspeciales(int cursor, int x, int y){
 	default:
 		break;
 	}
-
 	if (alpha >= PI * 2.0 && alpha <= 0) alpha = 0;
 	if (beta >= PI * 2.0 && beta <= 0) beta = 0; //hay que repasarlo para evitar el salto
 	glutPostRedisplay();
