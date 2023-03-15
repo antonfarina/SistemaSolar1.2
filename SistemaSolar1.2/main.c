@@ -41,24 +41,22 @@ void suma_angulo(planeta* p) {
 
 void dibujar_orbitas() {
 	float x, z;
+	float radios[] = {mercurio.distancia_sol,venus.distancia_sol, tierra.distancia_sol, marte.distancia_sol, jupiter.distancia_sol,saturno.distancia_sol,urano.distancia_sol,neptuno.distancia_sol};
+	for (int j = 0; j < 8;j++) {
 	//dibujamos en un lazo
-	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	for (int i = 0; i < 100; i++) {
-		//componente x
-		x = mercurio.distancia_sol * cos(2.0 * PI * i / 100.0);
-		//componene z
-		z = mercurio.distancia_sol * sin(2.0 * PI * i / 100.0);
-		//la componente y=0
-		glVertex3f(x, 0.0, z);
-		//componente x
-		x = mercurio.distancia_sol * cos(2.0 * PI * i / 100.0);
-		//componene z
-		z = mercurio.distancia_sol * sin(2.0 * PI * i / 100.0);
-		//la componente y=0
-		glVertex3f(x, 0.0, z);
+		glBegin(GL_LINE_LOOP);
+		glColor3f(1.0f, 1.0f, 1.0f);
+		for (int i = 0; i < 100; i++) {
+			//componente x
+			x = radios[j] * cos(2.0 * PI * i / 100.0);
+			//componene z
+			z = radios[j] * sin(2.0 * PI * i / 100.0);
+			//la componente y=0
+			glVertex3f(x, 0.0, z);
+		}
+		glEnd();
 	}
-	glEnd();
+	
 }
 
 //funcion que dibuja la orbita de un planeta
@@ -126,7 +124,7 @@ void dibuja_planeta(planeta p) {
 		glPopMatrix();
 	glPopMatrix();
 	//dibujamos la orbita
-	dibuja_orbita(p.distancia_sol);
+	//dibuja_orbita(p.distancia_sol);
 }
 
 //funcion de dibujo de la tiera con sus satelites
@@ -184,7 +182,7 @@ void dibuja_tierra() {
 		glPopMatrix();
 		dibuja_orbita(ISS.distancia_sol);
 	glPopMatrix();
-	dibuja_orbita(tierra.distancia_sol);
+	//dibuja_orbita(tierra.distancia_sol);
 }
 
 //funcion de dibujo de saturno y sus anillos
@@ -214,7 +212,7 @@ void dibuja_saturno() {
 	glutWireTorus(8.0f, 75.0f, 20, 20);
 	glPopMatrix();
 	//dibujamos la orbita
-	dibuja_orbita(saturno.distancia_sol);
+	//dibuja_orbita(saturno.distancia_sol);
 }
 
 // Función de display
@@ -254,6 +252,7 @@ void Display(void) {
 	dibuja_planeta(urano);
 	//dibujamos neptuno
 	dibuja_planeta(neptuno);
+	dibujar_orbitas();
 	// Se limpian los buffers
 	glutSwapBuffers();
 	glFlush();
