@@ -7,6 +7,7 @@
 
 float alpha = 0;
 float beta = 0;
+//flags para tener las orbitas activadas y el movimiento activado
 int flag_orbitas = 1, flag_movimiento = 1;
 
 void moverCamara() {
@@ -17,15 +18,16 @@ void moverCamara() {
 	//modificamos la vision
 	glOrtho(-DISTANCIA, DISTANCIA, -DISTANCIA, DISTANCIA, 1, DISTANCIA*2);
 	//enfocamos la camara
-	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, 1, 0);
+	gluLookAt(((float)DISTANCIA * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * (float)sin(beta)),((float)DISTANCIA * cos(alpha) * cos(beta)), 0, 0, 0, 0, cos(beta), 0);
 }
 
 void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45, 1, 1, DISTANCIA * 2);
+	//comprobamos si es un satelite o no
 	if (satelite) {
-		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), (distancia_visto * cos(angulo_visto * PI / 180)) + distancia_visor, 0, (-1 * distancia_visto * sin(angulo_visto * PI / 180)) + distancia_visor, 0, 1, 0);
+		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), distancia_visto * cos((angulo_visto + angulo_visor) * PI / 180) + distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visto * sin((angulo_visto + angulo_visor) * PI / 180) - distancia_visor * sin(angulo_visor * PI / 180), 0, 1, 0);
 	} else {
 		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), distancia_visto * cos(angulo_visto * PI / 180), 0, -1 * distancia_visto * sin(angulo_visto * PI / 180), 0, 1, 0);
 	}
@@ -74,10 +76,11 @@ void teclasEspeciales(int cursor, int x, int y){
 		break;
 		//Giros:
 	case GLUT_KEY_UP:
-		beta -= INCREMENTO;
+		beta += INCREMENTO;
+
 		break;
 	case GLUT_KEY_DOWN:
-		beta += INCREMENTO;
+		beta -= INCREMENTO;
 		break;
 	case GLUT_KEY_RIGHT:
 		alpha -= INCREMENTO;
@@ -88,9 +91,6 @@ void teclasEspeciales(int cursor, int x, int y){
 	default:
 		break;
 	}
-	if (alpha >= PI * 2.0 || alpha <= 0) {
-		alpha += -PI * 2.0;
-	}
-	if (beta >= PI * 2.0 || beta <= 0) beta += -PI * 2.0; //hay que repasarlo para evitar el salto
+
 	glutPostRedisplay();
 }

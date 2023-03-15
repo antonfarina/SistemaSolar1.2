@@ -29,6 +29,16 @@ planeta luna = {80, 10, 0, 15, 0, 10, 255, 255, 255};
 planeta ISS = {120, 15, 0, 12, 0, 9, 200, 100, 97};
 
 
+void cambiar_tamano(GLint nuevo_ancho, GLint nuevo_alto) {
+	//establecemos el viewport al tamaño
+	glViewport(0, 0, nuevo_ancho, nuevo_alto);
+	//matriz de proyeccion
+	glMatrixMode(GL_PROJECTION);
+	//cargamos la identidad
+	glLoadIdentity();
+	gluPerspective(45, (float)nuevo_ancho / (float)nuevo_alto, 1, DISTANCIA * 2);
+}
+
 //funcion que actualiza el angulo de rotacion y traslacion de un planeta
 void suma_angulo(planeta* p) {
 	//actualizamos la velocidad de traslacion
@@ -165,7 +175,7 @@ void dibuja_tierra() {
 		//dibujo de la ISS
 		glPushMatrix();
 			//rotamos alrededor de la tierra
-			glRotatef(-ISS.angulo_traslacion, 0, 1, 0);
+			glRotatef(ISS.angulo_traslacion, 0, 1, 0);
 			//trasladamos el la luna a su posicion
 			glTranslatef(ISS.distancia_sol, 0, 0);
 			glPushMatrix();
@@ -269,7 +279,7 @@ void menu(void) {
 }
 // Función de display
 void Display(void) {
-	//switch de la camara
+	//switch de la camara/telescopio
 	switch (camara) {
 	case 1: 
 		moverCamara();
@@ -322,7 +332,7 @@ void Display(void) {
 	// Inicializamos la matriz del modelo a la identidad
 	glLoadIdentity();
 	//dibujo de los planetas y ejes
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glPushMatrix();
 	glScalef(100, 100, 100);
 	dibuja_ejes();
@@ -405,16 +415,24 @@ int main(int argc, char** argv) {
 	//Crear la ventana
 	glutCreateWindow("Sistema solar en OpenGL 1.2");
 
+	glutReshapeFunc(cambiar_tamano);
 	//Funcion de dibujo
 	glutDisplayFunc(Display);
 	//Funcion de actualizacion
 	glutIdleFunc(Idle);
-	
+
+	//aspecto de la ventana
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45, (float)ANCHO_VENTANA / (float)ALTO_VENTANA, 1, DISTANCIA * 2);
+
 	openGlInit();
-	movimiento();
+	//funcion de movimiento
+	//movimiento();
+	//funciones de teclado
 	glutKeyboardFunc(teclas);
 	glutSpecialFunc(teclasEspeciales);
-	moverCamara();
+	//menu
 	menu();
 	//Lazo principal
 	glutMainLoop();
