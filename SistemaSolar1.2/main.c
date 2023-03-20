@@ -429,7 +429,7 @@ int main(int argc, char** argv) {
 
 	openGlInit();
 	//funcion de movimiento
-	//movimiento();
+	movimiento();
 	//funciones de teclado
 	glutKeyboardFunc(teclas);
 	glutSpecialFunc(teclasEspeciales);
