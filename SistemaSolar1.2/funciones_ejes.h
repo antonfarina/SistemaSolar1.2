@@ -26,10 +26,16 @@ typedef struct {
 	float color_B;
 }planeta;
 
+//funcion que devuelve 1 si las orbitas estan activadas y 0 si no lo estan
 int get_orbitas();
+//funcion que devuelve 1 si el movimento esta activado y 0 si no lo esta
 int get_movimiento();
-void moverCamara();
-void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite);
+//funcion que modifica la vision en funcion de las teclas
+void moverCamara(float aspecto);
+//funcion que enfoca la camara a un planeta desde el planeta tierra
+void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite, float aspecto);
+//funcion de captura de las teclas
 void teclas(unsigned char c, int x, int y);
+//funcion de captura de las teclas especiales
 void teclasEspeciales(int cursor, int x, int y);
 
