@@ -37,7 +37,6 @@ void cambiar_tamano(GLint nuevo_ancho, GLint nuevo_alto) {
 	//matriz de proyeccion
 	glMatrixMode(GL_PROJECTION);
 	aspecto = (float)nuevo_ancho / (float)nuevo_alto;
-	//printf("%d, %d, %f\n", nuevo_alto, nuevo_ancho, (float)nuevo_ancho / (float)nuevo_alto);
 	//cargamos la identidad
 	glLoadIdentity();
 	gluPerspective(45, aspecto, 1, DISTANCIA * 2);
@@ -53,9 +52,11 @@ void suma_angulo(planeta* p) {
 	if (p->angulo_rotacion > 360)p->angulo_rotacion += -360;
 }
 
+//funcion de dibujo de las orbitas de los planetas
 void dibujar_orbitas() {
 	float x, z;
-	float radios[] = {mercurio.distancia_sol,venus.distancia_sol, tierra.distancia_sol, marte.distancia_sol, jupiter.distancia_sol,saturno.distancia_sol,urano.distancia_sol,neptuno.distancia_sol};
+	float radios[] = {mercurio.distancia_sol, venus.distancia_sol, tierra.distancia_sol, marte.distancia_sol, jupiter.distancia_sol, saturno.distancia_sol, urano.distancia_sol, neptuno.distancia_sol};
+	//orbitas de los planetas
 	for (int j = 0; j < 8; j++) {
 	//dibujamos en un lazo
 		glBegin(GL_LINE_LOOP);
@@ -70,24 +71,33 @@ void dibujar_orbitas() {
 		}
 		glEnd();
 	}
-	
-}
 
-//funcion que dibuja la orbita de un planeta
-void dibuja_orbita(float radio) {
-	float x, z;
-	//dibujamos en un lazo
+	//orbita de la luna
 	glBegin(GL_LINE_LOOP);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	for (int i = 0; i < 100; i++) {
 		//componente x
-		x = radio * cos(2.0 * PI * i / 100.0);
+		x = luna.distancia_sol * cos(2.0 * PI * i / 100.0) + tierra.distancia_sol * cos(-tierra.angulo_traslacion * PI / 180);
 		//componene z
-		z = radio * sin(2.0 * PI * i / 100.0);
-		glColor3f(1.0f, 1.0f, 1.0f);
+		z = luna.distancia_sol * sin(2.0 * PI * i / 100.0) + tierra.distancia_sol * sin(-tierra.angulo_traslacion * PI / 180);;
 		//la componente y=0
 		glVertex3f(x, 0.0, z);
 	}
 	glEnd();
+
+	//orbita de la ISS
+	glBegin(GL_LINE_LOOP);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	for (int i = 0; i < 100; i++) {
+		//componente x
+		x = ISS.distancia_sol * cos(2.0 * PI * i / 100.0) + tierra.distancia_sol * cos(-tierra.angulo_traslacion * PI / 180);
+		//componene z
+		z = ISS.distancia_sol * sin(2.0 * PI * i / 100.0) + tierra.distancia_sol * sin(-tierra.angulo_traslacion * PI / 180);;
+		//la componente y=0
+		glVertex3f(x, 0.0, z);
+	}
+	glEnd();
+	
 }
 
 //funcion de dibujo de los ejes
@@ -174,7 +184,6 @@ void dibuja_tierra() {
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
-		if(get_orbitas())dibuja_orbita(luna.distancia_sol);
 
 		//dibujo de la ISS
 		glPushMatrix();
@@ -192,8 +201,6 @@ void dibuja_tierra() {
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
-		//dibujamos las orbitas
-		if (get_orbitas()) dibuja_orbita(ISS.distancia_sol);
 	glPopMatrix();
 }
 
