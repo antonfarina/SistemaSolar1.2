@@ -5,7 +5,7 @@
 //numero pi
 #define PI 3.141592
 //tiempo cada el que se actualizan los giros
-#define TIEMPO 60
+#define TIEMPO 70
 
 //estructura para los cuerpos celestes
 typedef struct {
