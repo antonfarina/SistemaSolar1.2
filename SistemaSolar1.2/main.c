@@ -19,7 +19,7 @@ float aspecto = 1;
 planeta sol = {0, 0, 0, 1, 0, 100, 255, 171, 25};
 planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
 planeta venus = {280, 8, 150, 5.2, 0, 35, 227, 172, 61};
-planeta tierra = {450, 7, 0, 9, 0, 40};
+planeta tierra = {450, 7, 0, 9, 0, 40, 0, 0, 255};
 planeta marte = {650, 6, 120, 10, 0, 35, 232, 71, 46 };
 planeta jupiter = {800, 5, 0, 15, 0, 60, 227, 211, 163};
 planeta saturno = {1050, 4.4, 0, 9, 0, 50, 169, 151, 204};
@@ -97,7 +97,6 @@ void dibujar_orbitas() {
 		glVertex3f(x, 0.0, z);
 	}
 	glEnd();
-	
 }
 
 //funcion de dibujo de los ejes
@@ -344,21 +343,17 @@ void Display(void) {
 	glMatrixMode(GL_MODELVIEW);
 	// Inicializamos la matriz del modelo a la identidad
 	glLoadIdentity();
-	//dibujo de los planetas y ejes
+	//dibujo de los planetas
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//dibujamos el sol
 	dibuja_planeta(sol);
-	//dibujamos mercurio
 	dibuja_planeta(mercurio);
-	//dibujamos venus
 	dibuja_planeta(venus);
 	dibuja_tierra();
 	dibuja_planeta(marte);
 	dibuja_planeta(jupiter);
 	dibuja_saturno();
-	//dibujamos urano
 	dibuja_planeta(urano);
-	//dibujamos neptuno
 	dibuja_planeta(neptuno);
 	//si el flag esta a 1 dibujamos las orbitas
 	if (get_orbitas() == 1) {
@@ -399,7 +394,7 @@ void movimiento() {
 void openGlInit() {
 	//Incializaciones varias
 	glClearDepth(1.0f); //Valor z-buffer
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // valor limpieza buffer color
+	glClearColor(0.035f, 0.051f, 0.19f, 1.0f);  // valor limpieza buffer color
 	glEnable(GL_DEPTH_TEST); // z-buffer
 	glEnable(GL_CULL_FACE); //ocultacion caras back
 	glEnable(GL_NORMALIZE);
