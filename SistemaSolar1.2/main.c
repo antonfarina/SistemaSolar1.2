@@ -30,6 +30,13 @@ planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 76, 137, 212};
 planeta luna = {80, 10, 0, 15, 0, 10, 255, 255, 255};
 planeta ISS = {120, 15, 0, 12, 0, 9, 200, 100, 97};
 
+//luces 
+GLfloat ambiente[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+GLfloat difusa[] = { 1.0f, 1.0f, 0.8f, 1.0f };
+GLfloat especular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+GLfloat posicion_luz[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+GLfloat direccion_luz[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 //funcion que reescala los objetos segun el tamaño de la ventana
 void cambiar_tamano(GLint nuevo_ancho, GLint nuevo_alto) {
 	//establecemos el viewport al tamaño
@@ -162,7 +169,7 @@ void dibuja_tierra() {
 			//escalamnos
 			glScalef(tierra.tamano, tierra.tamano, tierra.tamano);
 			dibuja_ejes();
-			glColor3f(0.0f, .0f, 1.0f);
+			glColor3f(tierra.color_R/255, tierra.color_G/255, tierra.color_B/255);
 			//dibujamos el planeta
 			glCallList(esfera);
 		glPopMatrix();
@@ -344,9 +351,11 @@ void Display(void) {
 	// Inicializamos la matriz del modelo a la identidad
 	glLoadIdentity();
 	//dibujo de los planetas
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	//dibujamos el sol
+	glDisable(GL_LIGHTING);
 	dibuja_planeta(sol);
+	if (get_luces() == 1) glEnable(GL_LIGHTING);
 	dibuja_planeta(mercurio);
 	dibuja_planeta(venus);
 	dibuja_tierra();
@@ -399,16 +408,42 @@ void openGlInit() {
 	glEnable(GL_CULL_FACE); //ocultacion caras back
 	glEnable(GL_NORMALIZE);
 	glCullFace(GL_BACK);
+	glEnable(GL_LIGHTING);
+	glShadeModel(GL_FLAT);
 	//creacion de la lista de la esfera
 	esfera = glGenLists(1);
 	glNewList(esfera, GL_COMPILE);
 	arrayEsfera();
 	glEndList();
+
+	//luces
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambiente);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, difusa);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, especular);
+	glLightfv(GL_LIGHT0, GL_POSITION, posicion_luz);
+	//angulo de apertura del foco de la luz
+	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 179.0f);
+	//habilitamos la luz
+	glEnable(GL_LIGHT0);
+	//para el color
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glMateriali(GL_FRONT, GL_SHININESS, 1);
+	glEnable(GL_SMOOTH);
+	glShadeModel(GL_SMOOTH);
 }
 
 
 
 int main(int argc, char** argv) {
+	//menu
+	printf("Sistema solar con OPENGL 1.2 y glut\n");
+	printf("Opciones:\n");
+	printf("\tFlechas de teclado: mover la camara en modo alejada\n");
+	printf("\tLetra o: activar/desactivar orbitas\n");
+	printf("\tLetra m: activar/desactivar movimiento\n");
+	printf("\tLetra l: activar/desactivar iluminacion\n");
+	printf("\Clic derecho: abrir menu telescopio\n");
 	glutInit(&argc, argv);
 	//Posicion de la ventana
 	glutInitWindowPosition(100, 100);
@@ -418,7 +453,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
 	//Crear la ventana
 	glutCreateWindow("Sistema solar en OpenGL 1.2");
-
+	//funcion de escalado de la ventana
 	glutReshapeFunc(cambiar_tamano);
 	//Funcion de dibujo
 	glutDisplayFunc(Display);

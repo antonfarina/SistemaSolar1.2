@@ -8,7 +8,7 @@
 float alpha = 0;
 float beta = 0;
 //flags para tener las orbitas activadas y el movimiento activado
-int flag_orbitas = 1, flag_movimiento = 1;
+int flag_orbitas = 1, flag_movimiento = 1, flag_luces = 1;
 
 void moverCamara(float aspecto) {
 	//configuracion de la matriz de proyeccion
@@ -44,8 +44,11 @@ void teclas(unsigned char c, int x, int y) {
 			flag_orbitas = !flag_orbitas;
 			break;
 		//activacion del movimiento
-		case 'p':
+		case 'm':
 			flag_movimiento = !flag_movimiento;
+			break;
+		case 'l':
+			flag_luces = !flag_luces;
 			break;
 	}
 }
@@ -58,6 +61,11 @@ int get_orbitas() {
 //getter del movimiento
 int get_movimiento() {
 	return flag_movimiento;
+}
+
+//getter luces
+int get_luces() {
+	return flag_luces;
 }
 
 //funcion de teclas especiales para mover la camara
