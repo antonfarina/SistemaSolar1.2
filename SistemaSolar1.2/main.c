@@ -67,7 +67,7 @@ void dibujar_orbitas() {
 	for (int j = 0; j < 8; j++) {
 	//dibujamos en un lazo
 		glBegin(GL_LINE_LOOP);
-		glColor3f(1.0f, 1.0f, 1.0f);
+		glColor3f(0.7f, 0.7f, 0.7f);
 		for (int i = 0; i < 100; i++) {
 			//componente x
 			x = radios[j] * cos(2.0 * PI * i / 100.0);
@@ -81,7 +81,7 @@ void dibujar_orbitas() {
 
 	//orbita de la luna
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.7f, 0.7f, 0.7f);
 	for (int i = 0; i < 100; i++) {
 		//componente x
 		x = luna.distancia_sol * cos(2.0 * PI * i / 100.0) + tierra.distancia_sol * cos(-tierra.angulo_traslacion * PI / 180);
@@ -94,7 +94,7 @@ void dibujar_orbitas() {
 
 	//orbita de la ISS
 	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.7f, 0.7f, 0.7f);
 	for (int i = 0; i < 100; i++) {
 		//componente x
 		x = ISS.distancia_sol * cos(2.0 * PI * i / 100.0) + tierra.distancia_sol * cos(-tierra.angulo_traslacion * PI / 180);
@@ -354,6 +354,10 @@ void Display(void) {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	//dibujamos el sol
 	glDisable(GL_LIGHTING);
+	//si el flag esta a 1 dibujamos las orbitas
+	if (get_orbitas() == 1) {
+		dibujar_orbitas();
+	}
 	dibuja_planeta(sol);
 	if (get_luces() == 1) glEnable(GL_LIGHTING);
 	dibuja_planeta(mercurio);
@@ -364,10 +368,7 @@ void Display(void) {
 	dibuja_saturno();
 	dibuja_planeta(urano);
 	dibuja_planeta(neptuno);
-	//si el flag esta a 1 dibujamos las orbitas
-	if (get_orbitas() == 1) {
-		dibujar_orbitas();
-	}
+	
 	// Se limpian los buffers
 	glutSwapBuffers();
 	glFlush();
