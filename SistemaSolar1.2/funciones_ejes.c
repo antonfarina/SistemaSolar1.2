@@ -27,7 +27,7 @@ void telescopio(float distancia_visor, float angulo_visor, float distancia_visto
 	//cargamos la identidad
 	glLoadIdentity();
 	//perspectiva con aspecto
-	gluPerspective(45, aspecto, 1, DISTANCIA * 2);
+	gluPerspective(45, aspecto, 1, DISTANCIA);
 	//comprobamos si es un satelite o no
 	if (satelite) {
 		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), distancia_visto * cos((angulo_visto + angulo_visor) * PI / 180) + distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visto * sin((angulo_visto + angulo_visor) * PI / 180) - distancia_visor * sin(angulo_visor * PI / 180), 0, 1, 0);

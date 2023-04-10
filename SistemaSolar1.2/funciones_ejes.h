@@ -21,9 +21,6 @@ typedef struct {
 	//tamaño del planeta
 	int tamano;
 	//colores
-	float color_R;
-	float color_G;
-	float color_B;
 	int textura;
 }planeta;
 

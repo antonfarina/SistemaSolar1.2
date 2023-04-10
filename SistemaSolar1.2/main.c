@@ -18,45 +18,46 @@ unsigned int esfera;
 //camara alejada predeterminada
 int camara = 1; 
 float aspecto = 1;
-//datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB, textura
-planeta sol = {0, 0, 0, 1, 0, 100, 255, 171, 25};
-planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
-planeta venus = {280, 8, 150, 5.2, 0, 35, 227, 172, 61};
-planeta tierra = {450, 7, 0, 9, 0, 40, 0, 0, 255};
-planeta marte = {650, 6, 120, 10, 0, 35, 232, 71, 46 };
-planeta jupiter = {800, 5, 0, 15, 0, 60, 227, 211, 163};
-planeta saturno = {1050, 4.4, 0, 9, 0, 50, 169, 151, 204};
-planeta urano = {1250, 3.7, 26, 6, 0, 45, 50, 156, 120};
-planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 76, 137, 212};
+//datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño
+planeta sol = {0, 0, 0, 1, 0, 100};
+planeta mercurio = {180, 10, 0, 0, 0, 25};
+planeta venus = {280, 8, 150, 5.2, 0, 35};
+planeta tierra = {450, 7, 0, 9, 0, 40};
+planeta marte = {650, 6, 120, 10, 0, 35};
+planeta jupiter = {800, 5, 0, 15, 0, 60};
+planeta saturno = {1050, 4.4, 0, 9, 0, 50};
+planeta urano = {1250, 3.7, 26, 6, 0, 45};
+planeta neptuno = {1400, 2.5, 160, 11, 0, 45};
 
 //satelites de la tierra
-planeta luna = {80, 10, 0, 0, 0, 10, 255, 255, 255};
-planeta ISS = {120, 15, 0, 12, 0, 9, 200, 100, 97};
+planeta luna = {80, 10, 0, 2, 225, 10};
+planeta ISS = {120, 15, 0, 12, 0, 9};
 
 //luces 
 GLfloat ambiente[] = {0.0f, 0.0f, 0.0f, 1.0f};
-GLfloat difusa[] = {1.0f, 1.0f, 0.8f, 1.0f};
+GLfloat difusa[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat posicion_luz[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat direccion_luz[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
+//funcion que carga la textura en el planeta a partir de una imagen
 void crea_textura(planeta* p, char* ruta) {
-	glGenTextures(1, &(p->textura));
-	glBindTexture(GL_TEXTURE_2D, p->textura); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load image, create texture and generate mipmaps
 	int width, height, nrChannels;
-	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	//unsigned char* imagen = stbi_load("terra.bmp", &width, &height, &nrChannels, 0);
+	//geneneramos la textura
+	glGenTextures(1, &(p->textura));
+	glBindTexture(GL_TEXTURE_2D, p->textura);
+	//parametros wrap
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//parametros de escala
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
+	//para que las texturas aparezcan al derecho
+	stbi_set_flip_vertically_on_load(1);
+	//cargamos la imagen
 	unsigned char* imagen = stbi_load(ruta, &width, &height, &nrChannels, 0);
 	if (imagen) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imagen);
-		//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, width, height, GL_RGB, GL_UNSIGNED_BYTE, imagen); //con mimap 
 
 	} else {
 		printf("Fallo en la carga de la textura %s\n", imagen);
@@ -174,8 +175,7 @@ void dibuja_planeta(planeta p) {
 			//escalamnos
 			glScalef(p.tamano, p.tamano, p.tamano);
 			dibuja_ejes();
-			//colores
-			glColor3f(p.color_R/255, p.color_G/255, p.color_B/255);
+			//usamos la textura
 			glBindTexture(GL_TEXTURE_2D, p.textura);
 			//dibujamos el planeta
 			glCallList(esfera);
@@ -196,10 +196,10 @@ void dibuja_tierra() {
 		glPushMatrix();
 			//rotamos sobre si mismo
 			glRotatef(tierra.angulo_rotacion, 0, 1, 0);
-			//escalamnos
+			//escalamos
 			glScalef(tierra.tamano, tierra.tamano, tierra.tamano);
 			dibuja_ejes();
-			glColor3f(tierra.color_R/255, tierra.color_G/255, tierra.color_B/255);
+			//usamos la textura
 			glBindTexture(GL_TEXTURE_2D, tierra.textura);
 			//dibujamos la tierra
 			glCallList(esfera);
@@ -217,7 +217,7 @@ void dibuja_tierra() {
 				dibuja_ejes();
 				//escalamos a su posicion
 				glScalef(luna.tamano, luna.tamano, luna.tamano);
-				glColor3f(luna.color_R / 255, luna.color_G / 255, luna.color_B / 255);
+				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, luna.textura);
 				glCallList(esfera);
 			glPopMatrix();
@@ -235,8 +235,8 @@ void dibuja_tierra() {
 				dibuja_ejes();
 				//escalamos a su posicion
 				glScalef(ISS.tamano, ISS.tamano, ISS.tamano);
-				glColor3f(ISS.color_R / 255, ISS.color_G / 255, ISS.color_B / 255);
-				glBindTexture(GL_TEXTURE_2D, 0);
+				//usamos la textura
+				glBindTexture(GL_TEXTURE_2D, ISS.textura);
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
@@ -259,22 +259,19 @@ void dibuja_saturno() {
 	//escalamnos
 	glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
 	dibuja_ejes();
-	//colores
-	glColor3f(saturno.color_R / 255, saturno.color_G / 255, saturno.color_B / 255);
 	glBindTexture(GL_TEXTURE_2D, saturno.textura);
 	//dibujamos saturno
 	glCallList(esfera);
 	glPopMatrix();
-	//blanco
+	//quitamos la textura
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	//rotamos el anillo 
 	glRotatef(90, 1.0f, 0.0f, 0.0f);
 	//usamos un toro de anillo
-	glScalef(1, 1,0.25);
-	glutWireTorus(8.0f, 75.0f, 20, 20);
+	glScalef(1, 1, 0.25);
+	glutSolidTorus(15.0f, 75.0f, 20, 20);
 	glPopMatrix();
-	//quitamos la textura
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void usar_menu(int opcion) {
@@ -481,6 +478,7 @@ void openGlInit() {
 	crea_textura(&venus, "./texturas/venus.jpg");
 	crea_textura(&tierra, "./texturas/tierra_nubes.bmp");
 	crea_textura(&luna, "./texturas/luna.jpg");
+	crea_textura(&ISS, "./texturas/iss.jpg");
 	crea_textura(&marte, "./texturas/marte.jpg");
 	crea_textura(&jupiter, "./texturas/jupiter.jpg");
 	crea_textura(&saturno, "./texturas/saturno.jpg");
