@@ -232,11 +232,10 @@ void dibuja_tierra() {
 			glPushMatrix();
 				//rotamos alrededor de si misma
 				glRotatef(ISS.angulo_rotacion, 0, 1, 0);
-				//rotacion extra para que se vea mejor
-				glRotatef(15, 1, 0, 1);
 				dibuja_ejes();
+				glDisable(GL_LIGHTING);
 				//escalamos a su posicion
-				glScalef(2*ISS.tamano, 0.5*ISS.tamano, ISS.tamano);
+				glScalef(2*ISS.tamano, ISS.tamano, ISS.tamano);
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, ISS.textura);
 				glCallList(cubo);
@@ -401,6 +400,7 @@ void Display(void) {
 	dibuja_planeta(mercurio);
 	dibuja_planeta(venus);
 	dibuja_tierra();
+	if (get_luces() == 1) glEnable(GL_LIGHTING);
 	dibuja_planeta(marte);
 	dibuja_planeta(jupiter);
 	dibuja_saturno();
@@ -599,7 +599,7 @@ void openGlInit() {
 	crea_textura(&venus, "./texturas/venus.jpg");
 	crea_textura(&tierra, "./texturas/tierra_nubes.bmp");
 	crea_textura(&luna, "./texturas/luna.jpg");
-	crea_textura(&ISS, "./texturas/iss.jpg");
+	crea_textura(&ISS, "./texturas/iss4.jpg");
 	crea_textura(&marte, "./texturas/marte.jpg");
 	crea_textura(&jupiter, "./texturas/jupiter.jpg");
 	crea_textura(&saturno, "./texturas/saturno.jpg");
