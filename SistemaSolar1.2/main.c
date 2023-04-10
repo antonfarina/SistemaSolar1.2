@@ -14,7 +14,7 @@ const int ALTO_VENTANA = 700;
 
 extern int arrayEsfera();
 //lista esfera
-unsigned int esfera;
+unsigned int esfera, cubo;
 //camara alejada predeterminada
 int camara = 1; 
 float aspecto = 1;
@@ -31,7 +31,7 @@ planeta neptuno = {1400, 2.5, 160, 11, 0, 45};
 
 //satelites de la tierra
 planeta luna = {80, 10, 0, 2, 225, 10};
-planeta ISS = {120, 15, 0, 12, 0, 9};
+planeta ISS = {120, 15, 0, 3, 0, 9};
 
 //luces 
 GLfloat ambiente[] = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -232,12 +232,14 @@ void dibuja_tierra() {
 			glPushMatrix();
 				//rotamos alrededor de si misma
 				glRotatef(ISS.angulo_rotacion, 0, 1, 0);
+				//rotacion extra para que se vea mejor
+				glRotatef(15, 1, 0, 1);
 				dibuja_ejes();
 				//escalamos a su posicion
-				glScalef(ISS.tamano, ISS.tamano, ISS.tamano);
+				glScalef(2*ISS.tamano, 0.5*ISS.tamano, ISS.tamano);
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, ISS.textura);
-				glCallList(esfera);
+				glCallList(cubo);
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
@@ -451,6 +453,125 @@ void openGlInit() {
 	esfera = glGenLists(1);
 	glNewList(esfera, GL_COMPILE);
 	arrayEsfera();
+	glEndList();
+
+	//lista para el cubo
+	cubo = glGenLists(1);
+	glNewList(cubo, GL_COMPILE);
+	//CARA FRONTAL
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	//CARA FONDO
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	//CARA LATERAL DERECHA
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	//CARA LATERAL IZQUIERDA
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	//CARA INFERIOR
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	//CARA SUPERIOR
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+
 	glEndList();
 
 	//luces
