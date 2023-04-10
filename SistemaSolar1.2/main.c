@@ -12,7 +12,8 @@
 const int ANCHO_VENTANA = 700;
 const int ALTO_VENTANA = 700;
 
-extern int arrayEsfera();
+extern void arrayEsfera();
+extern void arrayCubo();
 //lista esfera
 unsigned int esfera, cubo;
 //camara alejada predeterminada
@@ -458,120 +459,7 @@ void openGlInit() {
 	//lista para el cubo
 	cubo = glGenLists(1);
 	glNewList(cubo, GL_COMPILE);
-	//CARA FRONTAL
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	//CARA FONDO
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glEnd();
-
-	//CARA LATERAL DERECHA
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glEnd();
-
-	//CARA LATERAL IZQUIERDA
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	//CARA INFERIOR
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	//CARA SUPERIOR
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glEnd();
-
+	arrayCubo();
 	glEndList();
 
 	//luces

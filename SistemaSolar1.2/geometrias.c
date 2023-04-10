@@ -5,7 +5,124 @@
 #include <glu.h>
 #include <glaux.h>
 
-int arrayEsfera(){
+void arrayCubo() {
+	//CARA FRONTAL
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	//CARA FONDO
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	//CARA LATERAL DERECHA
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	//CARA LATERAL IZQUIERDA
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	//CARA INFERIOR
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	//CARA SUPERIOR
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+	return 0;
+}
+
+void arrayEsfera(){
 	glBegin(GL_TRIANGLES);
 	glNormal3f(-0.0247692f, 0.987385f, -0.156387f);
 	glTexCoord2f(0.0250000f, 1.00000f);
@@ -3610,3 +3727,4 @@ int arrayEsfera(){
 
 	return 0;
 }
+

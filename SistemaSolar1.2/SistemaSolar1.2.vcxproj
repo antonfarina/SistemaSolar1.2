@@ -135,7 +135,7 @@
   <ItemGroup>
     <ClCompile Include="funciones_ejes.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="esfera.c" />
+    <ClCompile Include="geometrias.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
