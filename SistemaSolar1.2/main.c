@@ -1,3 +1,4 @@
+//Practica en OpenGL 1.2 de Antonio Farina Elorza y Carla Castedo Pereira
 #include <windows.h>
 #include <glut.h>
 #include <GL/gl.h>
