@@ -6,6 +6,9 @@
 #include <math.h>
 #include "funciones_ejes.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 const int ANCHO_VENTANA = 700;
 const int ALTO_VENTANA = 700;
 
@@ -15,7 +18,7 @@ unsigned int esfera;
 //camara alejada predeterminada
 int camara = 1; 
 float aspecto = 1;
-//datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB
+//datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, colorRGB, textura
 planeta sol = {0, 0, 0, 1, 0, 100, 255, 171, 25};
 planeta mercurio = {180, 10, 0, 0, 0, 25, 148, 108, 68};
 planeta venus = {280, 8, 150, 5.2, 0, 35, 227, 172, 61};
@@ -36,6 +39,30 @@ GLfloat difusa[] = {1.0f, 1.0f, 0.8f, 1.0f};
 GLfloat especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat posicion_luz[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat direccion_luz[] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+void crea_textura(planeta* p, char* ruta) {
+	glGenTextures(1, &(p->textura));
+	glBindTexture(GL_TEXTURE_2D, p->textura); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load image, create texture and generate mipmaps
+	int width, height, nrChannels;
+	// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+	//unsigned char* imagen = stbi_load("terra.bmp", &width, &height, &nrChannels, 0);
+	unsigned char* imagen = stbi_load(ruta, &width, &height, &nrChannels, 0);
+	if (imagen) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imagen);
+		//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, width, height, GL_RGB, GL_UNSIGNED_BYTE, imagen); //con mimap 
+
+	} else {
+		printf("Fallo en la carga de la textura %s\n", imagen);
+	}
+	stbi_image_free(imagen);
+}
 
 //funcion que reescala los objetos segun el tamaño de la ventana
 void cambiar_tamano(GLint nuevo_ancho, GLint nuevo_alto) {
@@ -149,10 +176,13 @@ void dibuja_planeta(planeta p) {
 			dibuja_ejes();
 			//colores
 			glColor3f(p.color_R/255, p.color_G/255, p.color_B/255);
+			glBindTexture(GL_TEXTURE_2D, p.textura);
 			//dibujamos el planeta
 			glCallList(esfera);
 		glPopMatrix();
 	glPopMatrix();
+	//quitamos la textura
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //funcion de dibujo de la tiera con sus satelites
@@ -170,7 +200,8 @@ void dibuja_tierra() {
 			glScalef(tierra.tamano, tierra.tamano, tierra.tamano);
 			dibuja_ejes();
 			glColor3f(tierra.color_R/255, tierra.color_G/255, tierra.color_B/255);
-			//dibujamos el planeta
+			glBindTexture(GL_TEXTURE_2D, tierra.textura);
+			//dibujamos la tierra
 			glCallList(esfera);
 		glPopMatrix();
 
@@ -187,6 +218,7 @@ void dibuja_tierra() {
 				//escalamos a su posicion
 				glScalef(luna.tamano, luna.tamano, luna.tamano);
 				glColor3f(luna.color_R / 255, luna.color_G / 255, luna.color_B / 255);
+				glBindTexture(GL_TEXTURE_2D, luna.textura);
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
@@ -204,10 +236,13 @@ void dibuja_tierra() {
 				//escalamos a su posicion
 				glScalef(ISS.tamano, ISS.tamano, ISS.tamano);
 				glColor3f(ISS.color_R / 255, ISS.color_G / 255, ISS.color_B / 255);
+				glBindTexture(GL_TEXTURE_2D, 0);
 				glCallList(esfera);
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
+	//quitamos la textura
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //funcion de dibujo de saturno y sus anillos
@@ -226,7 +261,8 @@ void dibuja_saturno() {
 	dibuja_ejes();
 	//colores
 	glColor3f(saturno.color_R / 255, saturno.color_G / 255, saturno.color_B / 255);
-	//dibujamos el planeta
+	glBindTexture(GL_TEXTURE_2D, saturno.textura);
+	//dibujamos saturno
 	glCallList(esfera);
 	glPopMatrix();
 	//blanco
@@ -237,6 +273,8 @@ void dibuja_saturno() {
 	glScalef(1, 1,0.25);
 	glutWireTorus(8.0f, 75.0f, 20, 20);
 	glPopMatrix();
+	//quitamos la textura
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void usar_menu(int opcion) {
@@ -356,6 +394,7 @@ void Display(void) {
 	glDisable(GL_LIGHTING);
 	//si el flag esta a 1 dibujamos las orbitas
 	if (get_orbitas() == 1) {
+		//glBindTexture(GL_TEXTURE_2D, 0);
 		dibujar_orbitas();
 	}
 	dibuja_planeta(sol);
@@ -432,9 +471,22 @@ void openGlInit() {
 	glMateriali(GL_FRONT, GL_SHININESS, 1);
 	glEnable(GL_SMOOTH);
 	glShadeModel(GL_SMOOTH);
+
+	//texturas
+	//las habilitamos
+	glEnable(GL_TEXTURE_2D);
+	//creamos las texturas
+	crea_textura(&sol, "./texturas/sol.jpg");
+	crea_textura(&mercurio, "./texturas/mercurio.jpg");
+	crea_textura(&venus, "./texturas/venus.jpg");
+	crea_textura(&tierra, "./texturas/tierra_nubes.bmp");
+	crea_textura(&luna, "./texturas/luna.jpg");
+	crea_textura(&marte, "./texturas/marte.jpg");
+	crea_textura(&jupiter, "./texturas/jupiter.jpg");
+	crea_textura(&saturno, "./texturas/saturno.jpg");
+	crea_textura(&urano, "./texturas/urano.jpg");
+	crea_textura(&neptuno, "./texturas/neptuno.jpg");
 }
-
-
 
 int main(int argc, char** argv) {
 	//menu

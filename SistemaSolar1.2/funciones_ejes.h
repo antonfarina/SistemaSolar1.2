@@ -24,6 +24,7 @@ typedef struct {
 	float color_R;
 	float color_G;
 	float color_B;
+	int textura;
 }planeta;
 
 //funcion que devuelve 1 si las orbitas estan activadas y 0 si no lo estan
