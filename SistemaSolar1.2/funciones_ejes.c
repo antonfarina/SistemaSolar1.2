@@ -8,7 +8,7 @@
 float alpha = 0;
 float beta = 0;
 //flags para tener las orbitas activadas y el movimiento activado
-int flag_orbitas = 1, flag_movimiento = 1, flag_luces = 1;
+int flag_orbitas = 1, flag_movimiento = 1, flag_luces = 1, flag_ejes = 1;
 
 void moverCamara(float aspecto) {
 	//configuracion de la matriz de proyeccion
@@ -16,7 +16,7 @@ void moverCamara(float aspecto) {
 	//cargamos la identidad
 	glLoadIdentity();
 	//modificamos la vision
-	gluPerspective(45, aspecto, 1, DISTANCIA * 3);
+	gluPerspective(45, aspecto, 1, DISTANCIA * 10);
 	//enfocamos la camara
 	gluLookAt(((float)DISTANCIA * 1.5 * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * 1.5 * (float)sin(beta)),((float)DISTANCIA * 1.5 * cos(alpha) * cos(beta)), 0, 0, 0, 0, cos(beta), 0);
 }
@@ -27,7 +27,7 @@ void telescopio(float distancia_visor, float angulo_visor, float distancia_visto
 	//cargamos la identidad
 	glLoadIdentity();
 	//perspectiva con aspecto
-	gluPerspective(45, aspecto, 1, DISTANCIA);
+	gluPerspective(45, aspecto, 1, DISTANCIA*10);
 	//comprobamos si es un satelite o no
 	if (satelite) {
 		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), distancia_visto * cos((angulo_visto + angulo_visor) * PI / 180) + distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visto * sin((angulo_visto + angulo_visor) * PI / 180) - distancia_visor * sin(angulo_visor * PI / 180), 0, 1, 0);
@@ -50,6 +50,9 @@ void teclas(unsigned char c, int x, int y) {
 		case 'l':
 			flag_luces = !flag_luces;
 			break;
+		case 'e':
+			flag_ejes = !flag_ejes;
+			break;
 	}
 }
 
@@ -66,6 +69,10 @@ int get_movimiento() {
 //getter luces
 int get_luces() {
 	return flag_luces;
+}
+
+int get_ejes() {
+	return flag_ejes;
 }
 
 //funcion de teclas especiales para mover la camara
