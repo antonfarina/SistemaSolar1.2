@@ -4,6 +4,7 @@
 #include <gl.h>
 #include <glu.h>
 #include <glaux.h>
+#include "funciones_ejes.h"
 
 void arrayCubo() {
 	//CARA FRONTAL

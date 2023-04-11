@@ -15,7 +15,7 @@ const int ALTO_VENTANA = 700;
 extern void arrayEsfera();
 extern void arrayCubo();
 //lista esfera
-unsigned int esfera, cubo;
+unsigned int esfera, cubo, anillo;
 //camara alejada predeterminada
 int camara = 1; 
 float aspecto = 1;
@@ -40,7 +40,36 @@ GLfloat difusa[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat posicion_luz[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat direccion_luz[] = {1.0f, 1.0f, 1.0f, 1.0f};
+void toro(double r, double R, int rSeg, int cSeg, int texture) {
+	glFrontFace(GL_CW);
 
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	const double TAU = 2 * PI;
+
+	for (int i = 0; i < rSeg; i++) {
+		glBegin(GL_QUAD_STRIP);
+		for (int j = 0; j <= cSeg; j++) {
+			for (int k = 0; k <= 1; k++) {
+				double s = (i + k) % rSeg + 0.5;
+				double t = j % (cSeg + 1);
+
+				double x = (R + r * cos(s * TAU / rSeg)) * cos(t * TAU / cSeg);
+				double y = (R + r * cos(s * TAU / rSeg)) * sin(t * TAU / cSeg);
+				double z = r * sin(s * TAU / rSeg);
+
+				double u = (i + k) / (float)rSeg;
+				double v = t / (float)cSeg;
+
+				glTexCoord2d(u, v);
+				glNormal3f(2 * x, 2 * y, 2 * z);
+				glVertex3d(2 * x, 2 * y, 2 * z);
+			}
+		}
+		glEnd();
+	}
+	glFrontFace(GL_CCW);
+}
 //funcion que carga la textura en el planeta a partir de una imagen
 void crea_textura(planeta* p, char* ruta) {
 	int width, height, nrChannels;
@@ -251,28 +280,27 @@ void dibuja_tierra() {
 void dibuja_saturno() {
 	//dibujo de saturno con sus anillos
 	glPushMatrix();
-	//rotamos alrededor del sol
-	glRotatef(saturno.angulo_traslacion, 0.0f, 1.0f, 0.0f);
-	//trasladamos el planteta a su posicion
-	glTranslatef(saturno.distancia_sol, 0.0f, 0.0f);
-	glPushMatrix();
-	//rotamos sobre si mismo
-	glRotatef(saturno.angulo_rotacion, 0.0f, 1.0f, 0.0f);
-	//escalamnos
-	glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
-	dibuja_ejes();
-	glBindTexture(GL_TEXTURE_2D, saturno.textura);
-	//dibujamos saturno
-	glCallList(esfera);
-	glPopMatrix();
-	//quitamos la textura
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	//rotamos el anillo 
-	glRotatef(90, 1.0f, 0.0f, 0.0f);
-	//usamos un toro de anillo
-	glScalef(1, 1, 0.25);
-	glutSolidTorus(15.0f, 75.0f, 20, 20);
+		//rotamos alrededor del sol
+		glRotatef(saturno.angulo_traslacion, 0.0f, 1.0f, 0.0f);
+		//trasladamos el planteta a su posicion
+		glTranslatef(saturno.distancia_sol, 0.0f, 0.0f);
+		glPushMatrix();
+			//rotamos sobre si mismo
+			glRotatef(saturno.angulo_rotacion, 0.0f, 1.0f, 0.0f);
+			//escalamnos
+			glScalef(saturno.tamano, saturno.tamano, saturno.tamano);
+			dibuja_ejes();
+			glBindTexture(GL_TEXTURE_2D, saturno.textura);
+			//dibujamos saturno
+			glCallList(esfera);
+		glPopMatrix();
+		//rotamos el anillo 
+		glRotatef(80, 1.0f, 0.0f, 0.0f);
+		//usamos un toro de anillo
+		glScalef(1, 1, 0);
+		glBindTexture(GL_TEXTURE_2D, anillo);
+		toro(12, saturno.tamano+1, 5, 20, anillo);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
 }
 
@@ -493,6 +521,28 @@ void openGlInit() {
 	crea_textura(&saturno, "./texturas/saturno.jpg");
 	crea_textura(&urano, "./texturas/urano.jpg");
 	crea_textura(&neptuno, "./texturas/neptuno.jpg");
+	int width, height, nrChannels;
+	//geneneramos la textura
+	glGenTextures(1, &anillo);
+	glBindTexture(GL_TEXTURE_2D, anillo);
+	//parametros wrap
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	//parametros de escala
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//para que las texturas aparezcan al derecho
+	stbi_set_flip_vertically_on_load(1);
+	//cargamos la imagen
+	unsigned char* imagen = stbi_load("./texturas/anillos.jpg", &width, &height, &nrChannels, 0);
+	if (imagen) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imagen);
+
+	}
+	else {
+		printf("Fallo en la carga de la textura %s\n", imagen);
+	}
+	stbi_image_free(imagen);
 }
 
 int main(int argc, char** argv) {
