@@ -124,6 +124,7 @@ void arrayCubo() {
 }
 
 void arrayEsfera(){
+	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_TRIANGLES);
 	glNormal3f(-0.0247692f, 0.987385f, -0.156387f);
 	glTexCoord2f(0.0250000f, 1.00000f);

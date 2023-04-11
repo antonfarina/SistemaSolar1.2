@@ -244,9 +244,9 @@ void dibuja_tierra() {
 			glPushMatrix();
 				//rotamos alrededor de si misma
 				glRotatef(luna.angulo_rotacion, 0, 1, 0);
-				if (get_ejes())dibuja_ejes();
 				//escalamos a su posicion
 				glScalef(luna.tamano, luna.tamano, luna.tamano);
+				if (get_ejes())dibuja_ejes();
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, luna.textura);
 				glCallList(esfera);
@@ -262,13 +262,14 @@ void dibuja_tierra() {
 			glPushMatrix();
 				//rotamos alrededor de si misma
 				glRotatef(ISS.angulo_rotacion, 0, 1, 0);
-				if (get_ejes())dibuja_ejes();
 				glDisable(GL_LIGHTING);
 				//escalamos a su posicion
 				glScalef(2*ISS.tamano, ISS.tamano, ISS.tamano);
+				if (get_ejes())dibuja_ejes();
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, ISS.textura);
 				glCallList(cubo);
+				glEnable(GL_LIGHTING);
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
@@ -540,6 +541,7 @@ int main(int argc, char** argv) {
 	printf("\tLetra o: activar/desactivar orbitas\n");
 	printf("\tLetra m: activar/desactivar movimiento\n");
 	printf("\tLetra l: activar/desactivar iluminacion\n");
+	printf("\tLetra e: activar/desactivar ejes\n");
 	printf("\Clic derecho: abrir menu telescopio\n");
 	glutInit(&argc, argv);
 	//Posicion de la ventana
