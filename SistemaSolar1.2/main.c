@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "funciones_ejes.h"
+#include "geometrias.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -12,10 +13,8 @@
 const int ANCHO_VENTANA = 700;
 const int ALTO_VENTANA = 700;
 
-extern void arrayEsfera();
-extern void arrayCubo();
 //lista esfera
-unsigned int esfera, cubo, anillo, fondo;
+unsigned int esfera, cubo, toro, anillo, fondo;
 //camara alejada predeterminada
 int camara = 1; 
 float aspecto = 1;
@@ -40,36 +39,8 @@ GLfloat difusa[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat posicion_luz[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat direccion_luz[] = {1.0f, 1.0f, 1.0f, 1.0f};
-void toro(double r, double R, int rSeg, int cSeg, int texture) {
-	glFrontFace(GL_CW);
 
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	const double TAU = 2 * PI;
 
-	for (int i = 0; i < rSeg; i++) {
-		glBegin(GL_QUAD_STRIP);
-		for (int j = 0; j <= cSeg; j++) {
-			for (int k = 0; k <= 1; k++) {
-				double s = (i + k) % rSeg + 0.5;
-				double t = j % (cSeg + 1);
-
-				double x = (R + r * cos(s * TAU / rSeg)) * cos(t * TAU / cSeg);
-				double y = (R + r * cos(s * TAU / rSeg)) * sin(t * TAU / cSeg);
-				double z = r * sin(s * TAU / rSeg);
-
-				double u = (i + k) / (float)rSeg;
-				double v = t / (float)cSeg;
-
-				glTexCoord2d(u, v);
-				glNormal3f(2 * x, 2 * y, 2 * z);
-				glVertex3d(2 * x, 2 * y, 2 * z);
-			}
-		}
-		glEnd();
-	}
-	glFrontFace(GL_CCW);
-}
 //funcion que carga la textura en el planeta a partir de una imagen
 void crea_textura(int* textura, char* ruta) {
 	int width, height, nrChannels;
@@ -262,6 +233,7 @@ void dibuja_tierra() {
 			glPushMatrix();
 				//rotamos alrededor de si misma
 				glRotatef(ISS.angulo_rotacion, 0, 1, 0);
+				//deshabilitamos las luces para que se vea bien el cubo
 				glDisable(GL_LIGHTING);
 				//escalamos a su posicion
 				glScalef(2*ISS.tamano, ISS.tamano, ISS.tamano);
@@ -269,7 +241,6 @@ void dibuja_tierra() {
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, ISS.textura);
 				glCallList(cubo);
-				glEnable(GL_LIGHTING);
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
@@ -300,7 +271,7 @@ void dibuja_saturno() {
 		//usamos un toro de anillo
 		glScalef(1, 1, 0);
 		glBindTexture(GL_TEXTURE_2D, anillo);
-		toro(12, saturno.tamano+1, 5, 20, anillo);
+		glCallList(toro);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
 }
@@ -418,20 +389,25 @@ void Display(void) {
 	glLoadIdentity();
 	//dibujo de los planetas
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//quitamos las luces para el fondo
 	glDisable(GL_LIGHTING);
+	//textura del fondo
 	glBindTexture(GL_TEXTURE_2D, fondo);
+	//deshabilitamos la ocultacion de caras
 	glDisable(GL_CULL_FACE);
+	//envolvemos el sistema solar en una esfera con las normales orientadas hacia dentro
 	glPushMatrix();
-	glScalef(DISTANCIA*5, DISTANCIA*5, DISTANCIA*5);
-	glCallList(esfera);
+		glScalef(DISTANCIA*5, DISTANCIA*5, DISTANCIA*5);
+		glCallList(esfera);
 	glPopMatrix();
 	glEnable(GL_CULL_FACE);
-	//dibujamos el sol
+	//orbitas sin textura
 	glBindTexture(GL_TEXTURE_2D, 0);
 	//si el flag esta a 1 dibujamos las orbitas
 	if (get_orbitas() == 1) {
 		dibujar_orbitas();
 	}
+	//dibujamos los planetas
 	dibuja_planeta(sol);
 	if (get_luces() == 1) glEnable(GL_LIGHTING);
 	dibuja_planeta(mercurio);
@@ -486,17 +462,6 @@ void openGlInit() {
 	glCullFace(GL_BACK);
 	glEnable(GL_LIGHTING);
 	glShadeModel(GL_FLAT);
-	//creacion de la lista de la esfera
-	esfera = glGenLists(1);
-	glNewList(esfera, GL_COMPILE);
-	arrayEsfera();
-	glEndList();
-
-	//lista para el cubo
-	cubo = glGenLists(1);
-	glNewList(cubo, GL_COMPILE);
-	arrayCubo();
-	glEndList();
 
 	//luces
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambiente);
@@ -531,6 +496,21 @@ void openGlInit() {
 	crea_textura(&neptuno.textura, "../texturas/neptuno.jpg");
 	crea_textura(&anillo, "../texturas/anillos.jpg");
 	crea_textura(&fondo, "../texturas/estrellas.jpg");
+	//lista para el toro
+	toro = glGenLists(1);
+	glNewList(toro, GL_COMPILE);
+	arrayToro(12, saturno.tamano + 1, 5, 20, anillo);
+	glEndList();
+	//creacion de la lista de la esfera
+	esfera = glGenLists(1);
+	glNewList(esfera, GL_COMPILE);
+	arrayEsfera();
+	glEndList();
+	//lista para el cubo
+	cubo = glGenLists(1);
+	glNewList(cubo, GL_COMPILE);
+	arrayCubo();
+	glEndList();
 }
 
 int main(int argc, char** argv) {
