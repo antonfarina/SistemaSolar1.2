@@ -10,7 +10,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-const int ANCHO_VENTANA = 700;
+const int ANCHO_VENTANA = 1000;
 const int ALTO_VENTANA = 700;
 
 //indices listas esfera, cubo y toro
@@ -37,7 +37,7 @@ planeta ISS = {120, 15, 0, 3, 0, 9};
 
 //luces 
 GLfloat ambiente[] = {0.0f, 0.0f, 0.0f, 1.0f};
-GLfloat difusa[] = {1.0f, 1.0f, 1.0f, 1.0f};
+GLfloat difusa[] = {1.0f, 1.0f, .9f, 1.0f};
 GLfloat especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat posicion_luz[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat direccion_luz[] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -318,10 +318,13 @@ void dibuja_saturno() {
 		glPopMatrix();
 		//rotamos el anillo 
 		glRotatef(80, 1.0f, 0.0f, 0.0f);
-		//usamos un toro de anillo
+		//aplastamos el toro en el eje z
 		glScalef(1, 1, 0);
+		//textura
 		glBindTexture(GL_TEXTURE_2D, anillos);
+		//llamada a la lista
 		glCallList(toro);
+		//quitamos la textura
 		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
 }
