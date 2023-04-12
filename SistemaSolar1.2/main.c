@@ -496,7 +496,7 @@ void openGlInit() {
 	crea_textura(&venus.textura, "../texturas/venus.jpg");
 	crea_textura(&tierra.textura, "../texturas/tierra_nubes.bmp");
 	crea_textura(&luna.textura, "../texturas/luna.jpg");
-	crea_textura(&ISS.textura, "../texturas/iss5.jpg");
+	crea_textura(&ISS.textura, "../texturas/iss.jpg");
 	crea_textura(&marte.textura, "../texturas/marte.jpg");
 	crea_textura(&jupiter.textura, "../texturas/jupiter.jpg");
 	crea_textura(&saturno.textura, "../texturas/saturno.jpg");
