@@ -11,20 +11,21 @@ void arrayToro(double r, double R, int rSeg, int cSeg, int texture) {
 	glFrontFace(GL_CW);
 
 	glBindTexture(GL_TEXTURE_2D, texture);
+	//modo de fusion de la textura
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	const double TAU = 2 * PI;
 
 	for (int i = 0; i < rSeg; i++) {
 		glBegin(GL_QUAD_STRIP);
 		for (int j = 0; j <= cSeg; j++) {
 			for (int k = 0; k <= 1; k++) {
+				//pasos
 				double s = (i + k) % rSeg + 0.5;
 				double t = j % (cSeg + 1);
-
-				double x = (R + r * cos(s * TAU / rSeg)) * cos(t * TAU / cSeg);
-				double y = (R + r * cos(s * TAU / rSeg)) * sin(t * TAU / cSeg);
-				double z = r * sin(s * TAU / rSeg);
-
+				//coordenadas del toro
+				double x = (R + r * cos(s * 2 * PI / rSeg)) * cos(t * 2 * PI / cSeg);
+				double y = (R + r * cos(s * 2 * PI / rSeg)) * sin(t * 2 * PI / cSeg);
+				double z = r * sin(s * 2 * PI / rSeg);
+				//coordenadas de textura
 				double u = (i + k) / (float)rSeg;
 				double v = t / (float)cSeg;
 
@@ -60,20 +61,20 @@ void arrayCubo() {
 
 	//CARA FONDO
 	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
 	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(0.5f, -0.5f, -0.5f);
 	glEnd();
 
 	glBegin(GL_TRIANGLES);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
 	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0.0f, 0.0f);
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-0.5f, -0.5f, -0.5f);
 	glEnd();
 

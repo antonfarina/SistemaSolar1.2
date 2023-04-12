@@ -54,31 +54,33 @@ void teclas(unsigned char c, int x, int y) {
 		case 'e':
 			flag_ejes = !flag_ejes;
 			break;
+		//zoom para la camara alejada 
 		case '+':
 			if(zoom > 0.21)zoom -= 0.01;
 			break;
 		case '-':
-			if(zoom < 2) zoom += 0.01;
+			if(zoom < 1.9) zoom += 0.01;
 			break;
 
 	}
 }
 
-//getter de las orbitas
+//getter de las orbitas (dibujar las orbitas o no)
 int get_orbitas() {
 	return flag_orbitas;
 }
 
-//getter del movimiento
+//getter del movimiento (mover o parar los planetas9
 int get_movimiento() {
 	return flag_movimiento;
 }
 
-//getter luces
+//getter luces (iluminar la escena o no)
 int get_luces() {
 	return flag_luces;
 }
 
+//getter de ejes (mostrar los ejes o no)
 int get_ejes() {
 	return flag_ejes;
 }

@@ -13,8 +13,10 @@
 const int ANCHO_VENTANA = 700;
 const int ALTO_VENTANA = 700;
 
-//lista esfera
-unsigned int esfera, cubo, toro, anillo, fondo;
+//indices listas esfera, cubo y toro
+unsigned int esfera, cubo, toro;
+//texturas
+unsigned int anillos, fondo;
 //camara alejada predeterminada
 int camara = 1; 
 float aspecto = 1;
@@ -270,7 +272,7 @@ void dibuja_saturno() {
 		glRotatef(80, 1.0f, 0.0f, 0.0f);
 		//usamos un toro de anillo
 		glScalef(1, 1, 0);
-		glBindTexture(GL_TEXTURE_2D, anillo);
+		glBindTexture(GL_TEXTURE_2D, anillos);
 		glCallList(toro);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
@@ -383,13 +385,13 @@ void Display(void) {
 	}
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// Se activa la matriz del modelador
+	// Se activa la matriz del modelo
 	glMatrixMode(GL_MODELVIEW);
 	// Inicializamos la matriz del modelo a la identidad
 	glLoadIdentity();
-	//dibujo de los planetas
+	//poligonos rellenos
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//quitamos las luces para el fondo
+	//quitamos las luces para dibujar el fondo y el sol
 	glDisable(GL_LIGHTING);
 	//textura del fondo
 	glBindTexture(GL_TEXTURE_2D, fondo);
@@ -397,7 +399,7 @@ void Display(void) {
 	glDisable(GL_CULL_FACE);
 	//envolvemos el sistema solar en una esfera con las normales orientadas hacia dentro
 	glPushMatrix();
-		glScalef(DISTANCIA*5, DISTANCIA*5, DISTANCIA*5);
+		glScalef(DISTANCIA * 3, DISTANCIA * 3, DISTANCIA * 3);
 		glCallList(esfera);
 	glPopMatrix();
 	glEnable(GL_CULL_FACE);
@@ -494,12 +496,12 @@ void openGlInit() {
 	crea_textura(&saturno.textura, "../texturas/saturno.jpg");
 	crea_textura(&urano.textura, "../texturas/urano.jpg");
 	crea_textura(&neptuno.textura, "../texturas/neptuno.jpg");
-	crea_textura(&anillo, "../texturas/anillos.jpg");
+	crea_textura(&anillos, "../texturas/anillos.jpg");
 	crea_textura(&fondo, "../texturas/estrellas.jpg");
 	//lista para el toro
 	toro = glGenLists(1);
 	glNewList(toro, GL_COMPILE);
-	arrayToro(12, saturno.tamano + 1, 5, 20, anillo);
+	arrayToro(12, saturno.tamano + 1, 5, 20, anillos);
 	glEndList();
 	//creacion de la lista de la esfera
 	esfera = glGenLists(1);
