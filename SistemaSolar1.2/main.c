@@ -32,7 +32,7 @@ planeta urano = {1250, 3.7, 26, 6, 0, 45};
 planeta neptuno = {1400, 2.5, 160, 11, 0, 45};
 
 //satelites de la tierra
-planeta luna = {80, 10, 0, 2, 225, 10};
+planeta luna = {80, 10, 0, 0, 225, 10};
 planeta ISS = {120, 15, 0, 3, 0, 9};
 
 //luces 
@@ -42,6 +42,54 @@ GLfloat especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat posicion_luz[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat direccion_luz[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
+void cambio_camara() {
+	//switch de la camara/telescopio
+	switch (camara) {
+	case 1:
+		moverCamara(aspecto);
+		break;
+	case 2:
+		camara = 2;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, sol.distancia_sol, sol.angulo_traslacion, 0, aspecto);
+		break;
+	case 3:
+		camara = 3;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, mercurio.distancia_sol, mercurio.angulo_traslacion, 0, aspecto);
+		break;
+	case 4:
+		camara = 4;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, venus.distancia_sol, venus.angulo_traslacion, 0, aspecto);
+		break;
+	case 5:
+		camara = 5;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, luna.distancia_sol, luna.angulo_traslacion, 1, aspecto);
+		break;
+	case 6:
+		camara = 6;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, ISS.distancia_sol, ISS.angulo_traslacion, 1, aspecto);
+		break;
+	case 7:
+		camara = 7;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, marte.distancia_sol, marte.angulo_traslacion, 0, aspecto);
+		break;
+	case 8:
+		camara = 8;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, jupiter.distancia_sol, jupiter.angulo_traslacion, 0, aspecto);
+		break;
+	case 9:
+		camara = 9;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, saturno.distancia_sol, saturno.angulo_traslacion, 0, aspecto);
+		break;
+	case 10:
+		camara = 10;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, urano.distancia_sol, urano.angulo_traslacion, 0, aspecto);
+		break;
+	case 11:
+		camara = 11;
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, neptuno.distancia_sol, neptuno.angulo_traslacion, 0, aspecto);
+		break;
+	}
+}
 
 //funcion que carga la textura en el planeta a partir de una imagen
 void crea_textura(int* textura, char* ruta) {
@@ -181,7 +229,7 @@ void dibuja_planeta(planeta p) {
 			//usamos la textura
 			glBindTexture(GL_TEXTURE_2D, p.textura);
 			//dibujamos el planeta
-			glCallList(esfera);
+			glCallList(p.lista_render);
 		glPopMatrix();
 	glPopMatrix();
 	//quitamos la textura
@@ -205,7 +253,7 @@ void dibuja_tierra() {
 			//usamos la textura
 			glBindTexture(GL_TEXTURE_2D, tierra.textura);
 			//dibujamos la tierra
-			glCallList(esfera);
+			glCallList(tierra.lista_render);
 		glPopMatrix();
 
 		//dibujo de la luna
@@ -222,7 +270,7 @@ void dibuja_tierra() {
 				if (get_ejes())dibuja_ejes();
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, luna.textura);
-				glCallList(esfera);
+				glCallList(luna.lista_render);
 			glPopMatrix();
 		glPopMatrix();
 
@@ -242,7 +290,7 @@ void dibuja_tierra() {
 				if (get_ejes())dibuja_ejes();
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, ISS.textura);
-				glCallList(cubo);
+				glCallList(ISS.lista_render);
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
@@ -266,7 +314,7 @@ void dibuja_saturno() {
 			if (get_ejes())dibuja_ejes();
 			glBindTexture(GL_TEXTURE_2D, saturno.textura);
 			//dibujamos saturno
-			glCallList(esfera);
+			glCallList(saturno.lista_render);
 		glPopMatrix();
 		//rotamos el anillo 
 		glRotatef(80, 1.0f, 0.0f, 0.0f);
@@ -337,52 +385,7 @@ void menu(void) {
 }
 // Función de display
 void Display(void) {
-	//switch de la camara/telescopio
-	switch (camara) {
-	case 1: 
-		moverCamara(aspecto);
-		break;
-	case 2:
-		camara = 2;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, sol.distancia_sol, sol.angulo_traslacion,0, aspecto);
-		break;
-	case 3:
-		camara = 3;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, mercurio.distancia_sol, mercurio.angulo_traslacion, 0, aspecto);
-		break;
-	case 4:
-		camara = 4;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, venus.distancia_sol, venus.angulo_traslacion,0, aspecto);
-		break;
-	case 5:
-		camara = 5;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, luna.distancia_sol, luna.angulo_traslacion, 1, aspecto);
-		break;
-	case 6:
-		camara = 6;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, ISS.distancia_sol, ISS.angulo_traslacion, 1, aspecto);
-		break;
-	case 7:
-		camara = 7;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, marte.distancia_sol, marte.angulo_traslacion, 0, aspecto);
-		break;
-	case 8:
-		camara = 8;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, jupiter.distancia_sol, jupiter.angulo_traslacion, 0, aspecto);
-		break;
-	case 9:
-		camara = 9;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, saturno.distancia_sol, saturno.angulo_traslacion, 0, aspecto);
-		break;
-	case 10:
-		camara = 10;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, urano.distancia_sol, urano.angulo_traslacion, 0, aspecto);
-		break;
-	case 11:
-		camara = 11;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, neptuno.distancia_sol, neptuno.angulo_traslacion, 0, aspecto);
-		break;
-	}
+	cambio_camara();
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Se activa la matriz del modelo
@@ -513,6 +516,17 @@ void openGlInit() {
 	glNewList(cubo, GL_COMPILE);
 	arrayCubo();
 	glEndList();
+	sol.lista_render = esfera;
+	mercurio.lista_render = esfera;
+	venus.lista_render = esfera;
+	tierra.lista_render = esfera;
+	luna.lista_render = esfera;
+	ISS.lista_render = cubo;
+	marte.lista_render = esfera;
+	jupiter.lista_render = esfera;
+	saturno.lista_render = esfera;
+	urano.lista_render = esfera;
+	neptuno.lista_render = esfera;
 }
 
 int main(int argc, char** argv) {

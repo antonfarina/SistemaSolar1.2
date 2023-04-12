@@ -20,8 +20,10 @@ typedef struct {
 	float angulo_rotacion;
 	//tamaño del planeta
 	int tamano;
-	//colores
+	//textura
 	int textura;
+	//listarender
+	int* lista_render;
 }planeta;
 
 //funcion que devuelve 1 si las orbitas estan activadas y 0 si no lo estan
