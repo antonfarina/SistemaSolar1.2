@@ -36,4 +36,3 @@ void telescopio(float distancia_visor, float angulo_visor, float distancia_visto
 void teclas(unsigned char c, int x, int y);
 //funcion de captura de las teclas especiales
 void teclasEspeciales(int cursor, int x, int y);
-

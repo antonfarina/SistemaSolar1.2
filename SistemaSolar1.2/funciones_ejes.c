@@ -7,6 +7,7 @@
 
 float alpha = 0;
 float beta = 0;
+float zoom = 1;
 //flags para tener las orbitas activadas y el movimiento activado
 int flag_orbitas = 1, flag_movimiento = 1, flag_luces = 1, flag_ejes = 1;
 
@@ -16,9 +17,9 @@ void moverCamara(float aspecto) {
 	//cargamos la identidad
 	glLoadIdentity();
 	//modificamos la vision
-	gluPerspective(45, aspecto, 1, DISTANCIA * 10);
+	gluPerspective(45, aspecto, 1, DISTANCIA * 9);
 	//enfocamos la camara
-	gluLookAt(((float)DISTANCIA * 1.5 * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * 1.5 * (float)sin(beta)),((float)DISTANCIA * 1.5 * cos(alpha) * cos(beta)), 0, 0, 0, 0, cos(beta), 0);
+	gluLookAt(((float)DISTANCIA * 1.5 * zoom * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * 1.5 * zoom * (float)sin(beta)),((float)DISTANCIA * 1.5 * zoom * cos(alpha) * cos(beta)), 0, 0, 0, 0, cos(beta), 0);
 }
 
 void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite, float aspecto){
@@ -27,7 +28,7 @@ void telescopio(float distancia_visor, float angulo_visor, float distancia_visto
 	//cargamos la identidad
 	glLoadIdentity();
 	//perspectiva con aspecto
-	gluPerspective(45, aspecto, 1, DISTANCIA*10);
+	gluPerspective(45, aspecto, 1, DISTANCIA * 6);
 	//comprobamos si es un satelite o no
 	if (satelite) {
 		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), distancia_visto * cos((angulo_visto + angulo_visor) * PI / 180) + distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visto * sin((angulo_visto + angulo_visor) * PI / 180) - distancia_visor * sin(angulo_visor * PI / 180), 0, 1, 0);
@@ -53,6 +54,13 @@ void teclas(unsigned char c, int x, int y) {
 		case 'e':
 			flag_ejes = !flag_ejes;
 			break;
+		case '+':
+			if(zoom > 0.21)zoom -= 0.01;
+			break;
+		case '-':
+			if(zoom < 2) zoom += 0.01;
+			break;
+
 	}
 }
 

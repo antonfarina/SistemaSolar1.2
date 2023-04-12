@@ -518,6 +518,7 @@ int main(int argc, char** argv) {
 	printf("Sistema solar con OPENGL 1.2 y glut\n");
 	printf("Opciones:\n");
 	printf("\tFlechas de teclado: mover la camara en modo alejada\n");
+	printf("\tTeclas +/-: zoom en modo alejado\n");
 	printf("\tLetra o: activar/desactivar orbitas\n");
 	printf("\tLetra m: activar/desactivar movimiento\n");
 	printf("\tLetra l: activar/desactivar iluminacion\n");
