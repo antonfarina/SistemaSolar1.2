@@ -20,20 +20,20 @@ unsigned int anillos, fondo;
 //camara alejada predeterminada
 int camara = 1; 
 float aspecto = 1;
-//datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño
-planeta sol = {0, 0, 0, 1, 0, 100};
-planeta mercurio = {180, 10, 0, 0, 0, 25};
-planeta venus = {280, 8, 150, 5.2, 0, 35};
-planeta tierra = {450, 7, 0, 9, 0, 40};
-planeta marte = {650, 6, 120, 10, 0, 35};
-planeta jupiter = {800, 5, 0, 15, 0, 60};
-planeta saturno = {1050, 4.4, 0, 9, 0, 50};
-planeta urano = {1250, 3.7, 26, 6, 0, 45};
-planeta neptuno = {1400, 2.5, 160, 11, 0, 45};
+//datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, textura y lista de geometria
+planeta sol = {0, 0, 0, 1, 0, 100, 0, &esfera};
+planeta mercurio = {180, 10, 0, 0, 0, 25, 0, &esfera};
+planeta venus = {280, 8, 150, 5.2, 0, 35, 0, &esfera};
+planeta tierra = {450, 7, 0, 9, 0, 40, 0, &esfera};
+planeta marte = {650, 6, 120, 10, 0, 35, 0, &esfera};
+planeta jupiter = {800, 5, 0, 15, 0, 60, 0, &esfera};
+planeta saturno = {1050, 4.4, 0, 9, 0, 50, 0, &esfera};
+planeta urano = {1250, 3.7, 26, 6, 0, 45, 0, &esfera};
+planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 0, &esfera};
 
 //satelites de la tierra
-planeta luna = {80, 10, 0, 0, 225, 10};
-planeta ISS = {120, 15, 0, 3, 0, 9};
+planeta luna = {80, 10, 0, 0, 225, 10, 0, &esfera};
+planeta ISS = {120, 15, 0, 3, 0, 9, 0, &cubo};
 
 //luces 
 GLfloat ambiente[] = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -229,7 +229,7 @@ void dibuja_planeta(planeta p) {
 			//usamos la textura
 			glBindTexture(GL_TEXTURE_2D, p.textura);
 			//dibujamos el planeta
-			glCallList(p.lista_render);
+			glCallList(*(p.lista_render));
 		glPopMatrix();
 	glPopMatrix();
 	//quitamos la textura
@@ -253,7 +253,7 @@ void dibuja_tierra() {
 			//usamos la textura
 			glBindTexture(GL_TEXTURE_2D, tierra.textura);
 			//dibujamos la tierra
-			glCallList(tierra.lista_render);
+			glCallList(*(tierra.lista_render));
 		glPopMatrix();
 
 		//dibujo de la luna
@@ -270,7 +270,7 @@ void dibuja_tierra() {
 				if (get_ejes())dibuja_ejes();
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, luna.textura);
-				glCallList(luna.lista_render);
+				glCallList(*(luna.lista_render));
 			glPopMatrix();
 		glPopMatrix();
 
@@ -290,7 +290,7 @@ void dibuja_tierra() {
 				if (get_ejes())dibuja_ejes();
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, ISS.textura);
-				glCallList(ISS.lista_render);
+				glCallList(*(ISS.lista_render));
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
@@ -314,7 +314,7 @@ void dibuja_saturno() {
 			if (get_ejes())dibuja_ejes();
 			glBindTexture(GL_TEXTURE_2D, saturno.textura);
 			//dibujamos saturno
-			glCallList(saturno.lista_render);
+			glCallList(*(saturno.lista_render));
 		glPopMatrix();
 		//rotamos el anillo 
 		glRotatef(80, 1.0f, 0.0f, 0.0f);
@@ -519,17 +519,6 @@ void openGlInit() {
 	glNewList(cubo, GL_COMPILE);
 	arrayCubo();
 	glEndList();
-	sol.lista_render = esfera;
-	mercurio.lista_render = esfera;
-	venus.lista_render = esfera;
-	tierra.lista_render = esfera;
-	luna.lista_render = esfera;
-	ISS.lista_render = cubo;
-	marte.lista_render = esfera;
-	jupiter.lista_render = esfera;
-	saturno.lista_render = esfera;
-	urano.lista_render = esfera;
-	neptuno.lista_render = esfera;
 }
 
 int main(int argc, char** argv) {
