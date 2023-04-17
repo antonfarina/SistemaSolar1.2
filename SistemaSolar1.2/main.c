@@ -39,55 +39,20 @@ planeta ISS = {120, 15, 0, 3, 0, 9, 0, &cubo};
 GLfloat ambiente[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat difusa[] = {1.0f, 1.0f, .9f, 1.0f};
 GLfloat especular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+//luz en el (0,0,0)
 GLfloat posicion_luz[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat direccion_luz[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
 void cambio_camara() {
-	//switch de la camara/telescopio
-	switch (camara) {
-	case 1:
-		moverCamara(aspecto);
-		break;
-	case 2:
-		camara = 2;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, sol.distancia_sol, sol.angulo_traslacion, 0, aspecto);
-		break;
-	case 3:
-		camara = 3;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, mercurio.distancia_sol, mercurio.angulo_traslacion, 0, aspecto);
-		break;
-	case 4:
-		camara = 4;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, venus.distancia_sol, venus.angulo_traslacion, 0, aspecto);
-		break;
-	case 5:
-		camara = 5;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, luna.distancia_sol, luna.angulo_traslacion, 1, aspecto);
-		break;
-	case 6:
-		camara = 6;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, ISS.distancia_sol, ISS.angulo_traslacion, 1, aspecto);
-		break;
-	case 7:
-		camara = 7;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, marte.distancia_sol, marte.angulo_traslacion, 0, aspecto);
-		break;
-	case 8:
-		camara = 8;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, jupiter.distancia_sol, jupiter.angulo_traslacion, 0, aspecto);
-		break;
-	case 9:
-		camara = 9;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, saturno.distancia_sol, saturno.angulo_traslacion, 0, aspecto);
-		break;
-	case 10:
-		camara = 10;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, urano.distancia_sol, urano.angulo_traslacion, 0, aspecto);
-		break;
-	case 11:
-		camara = 11;
-		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, neptuno.distancia_sol, neptuno.angulo_traslacion, 0, aspecto);
-		break;
+	//vector de planetas que se pueden ver desde la tierra
+	planeta planetas[] = { sol, mercurio, venus, luna, ISS, marte, jupiter, saturno, urano, neptuno };
+	if (camara == 1) {
+		camaraAlejada(aspecto);
+	}else if (camara == 5 || camara == 6) {
+		//telescopio a satelites desde la tierra
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, planetas[camara - 2].distancia_sol, planetas[camara - 2].angulo_traslacion, 1, aspecto);
+	}else {
+		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, planetas[camara - 2].distancia_sol, planetas[camara - 2].angulo_traslacion, 0, aspecto);
 	}
 }
 
@@ -330,42 +295,7 @@ void dibuja_saturno() {
 }
 
 void usar_menu(int opcion) {
-	//opciones del menu para colocar la camara
-	switch (opcion) {
-		case 1:
-			camara = 1;
-		break;
-		case 2:
-			camara = 2;
-		break;
-		case 3:
-			camara = 3;
-		break;
-		case 4:
-			camara = 4;
-		break;
-		case 5:
-			camara = 5;
-		break;
-		case 6:
-			camara = 6;
-		break;
-		case 7:
-			camara = 7;
-		break;
-		case 8:
-			camara = 8;
-		break;
-		case 9:
-			camara = 9;
-		break;
-		case 10:
-			camara = 10;
-		break;
-		case 11:
-			camara = 11;
-		break;
-	}
+	camara = opcion;
 	glutPostRedisplay();
 }
 

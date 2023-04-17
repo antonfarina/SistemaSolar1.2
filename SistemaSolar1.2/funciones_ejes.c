@@ -5,13 +5,15 @@
 #include <stdio.h>
 #include "funciones_ejes.h"
 
-float alpha = 0;
+//angulos de rotacion de la camara
+float alfa = 0;
 float beta = 0;
+//zoom de la camara
 float zoom = 1;
-//flags para tener las orbitas activadas y el movimiento activado
+//flags para tener las orbitas, movimiento, luces y ejes activados
 int flag_orbitas = 1, flag_movimiento = 1, flag_luces = 1, flag_ejes = 1;
 
-void moverCamara(float aspecto) {
+void camaraAlejada(float aspecto) {
 	//configuracion de la matriz de proyeccion
 	glMatrixMode(GL_PROJECTION);
 	//cargamos la identidad
@@ -19,7 +21,7 @@ void moverCamara(float aspecto) {
 	//modificamos la vision
 	gluPerspective(45, aspecto, 1, DISTANCIA * 9);
 	//enfocamos la camara
-	gluLookAt(((float)DISTANCIA * 1.5 * zoom * (float)sin(alpha) * cos(beta)), ((float)DISTANCIA * 1.5 * zoom * (float)sin(beta)),((float)DISTANCIA * 1.5 * zoom * cos(alpha) * cos(beta)), 0, 0, 0, 0, cos(beta), 0);
+	gluLookAt(((float)DISTANCIA * 1.5 * zoom * (float)sin(alfa) * cos(beta)), ((float)DISTANCIA * 1.5 * zoom * (float)sin(beta)),((float)DISTANCIA * 1.5 * zoom * cos(alfa) * cos(beta)), 0, 0, 0, 0, cos(beta), 0);
 }
 
 void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite, float aspecto){
@@ -65,26 +67,6 @@ void teclas(unsigned char c, int x, int y) {
 	}
 }
 
-//getter de las orbitas (dibujar las orbitas o no)
-int get_orbitas() {
-	return flag_orbitas;
-}
-
-//getter del movimiento (mover o parar los planetas9
-int get_movimiento() {
-	return flag_movimiento;
-}
-
-//getter luces (iluminar la escena o no)
-int get_luces() {
-	return flag_luces;
-}
-
-//getter de ejes (mostrar los ejes o no)
-int get_ejes() {
-	return flag_ejes;
-}
-
 //funcion de teclas especiales para mover la camara
 void teclasEspeciales(int cursor, int x, int y){
 	switch (cursor)	{
@@ -109,13 +91,33 @@ void teclasEspeciales(int cursor, int x, int y){
 		beta -= INCREMENTO;
 		break;
 	case GLUT_KEY_RIGHT:
-		alpha -= INCREMENTO;
+		alfa -= INCREMENTO;
 		break;
 	case GLUT_KEY_LEFT:
-		alpha += INCREMENTO;
+		alfa += INCREMENTO;
 		break;
 	default:
 		break;
 	}
 	glutPostRedisplay();
+}
+
+//getter de las orbitas (dibujar las orbitas o no)
+int get_orbitas() {
+	return flag_orbitas;
+}
+
+//getter del movimiento (mover o parar los planetas9
+int get_movimiento() {
+	return flag_movimiento;
+}
+
+//getter luces (iluminar la escena o no)
+int get_luces() {
+	return flag_luces;
+}
+
+//getter de ejes (mostrar los ejes o no)
+int get_ejes() {
+	return flag_ejes;
 }
