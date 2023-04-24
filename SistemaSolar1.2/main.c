@@ -58,7 +58,7 @@ void cambio_camara() {
 
 //funcion que carga la textura en el planeta a partir de una imagen
 void crea_textura(int* textura, char* ruta) {
-	int width, height, nrChannels;
+	int width, height, nrChannels, formato;
 	//geneneramos la textura
 	glGenTextures(1, textura);
 	glBindTexture(GL_TEXTURE_2D, *textura);
@@ -72,8 +72,14 @@ void crea_textura(int* textura, char* ruta) {
 	stbi_set_flip_vertically_on_load(1);
 	//cargamos la imagen
 	unsigned char* imagen = stbi_load(ruta, &width, &height, &nrChannels, 0);
+	if (nrChannels == 3) {
+		formato = GL_RGB;
+	}else {
+		formato = GL_RGBA;
+	}
+
 	if (imagen) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imagen);
+		glTexImage2D(GL_TEXTURE_2D, 0, formato, width, height, 0, formato, GL_UNSIGNED_BYTE, imagen);
 
 	} else {
 		printf("Fallo en la carga de la textura %s\n", imagen);
@@ -420,13 +426,15 @@ void openGlInit() {
 	//texturas
 	//las habilitamos
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//creamos las texturas
 	crea_textura(&sol.textura, "../texturas/sol.jpg");
 	crea_textura(&mercurio.textura, "../texturas/mercurio.jpg");
 	crea_textura(&venus.textura, "../texturas/venus.jpg");
 	crea_textura(&tierra.textura, "../texturas/tierra_nubes.bmp");
 	crea_textura(&luna.textura, "../texturas/luna.jpg");
-	crea_textura(&ISS.textura, "../texturas/iss.jpg");
+	crea_textura(&ISS.textura, "../texturas/iss.png");
 	crea_textura(&marte.textura, "../texturas/marte.jpg");
 	crea_textura(&jupiter.textura, "../texturas/jupiter.jpg");
 	crea_textura(&saturno.textura, "../texturas/saturno.jpg");
