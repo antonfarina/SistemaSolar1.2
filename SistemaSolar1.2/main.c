@@ -254,8 +254,6 @@ void dibuja_tierra() {
 			glPushMatrix();
 				//rotamos alrededor de si misma
 				glRotatef(ISS.angulo_rotacion, 0, 1, 0);
-				//deshabilitamos las luces para que se vea bien el cubo
-				glDisable(GL_LIGHTING);
 				//escalamos a su posicion
 				glScalef(2*ISS.tamano, ISS.tamano, ISS.tamano);
 				if (get_ejes())dibuja_ejes();
@@ -356,13 +354,13 @@ void Display(void) {
 	if (get_luces() == 1) glEnable(GL_LIGHTING);
 	dibuja_planeta(mercurio);
 	dibuja_planeta(venus);
-	dibuja_tierra();
-	if (get_luces() == 1) glEnable(GL_LIGHTING);
 	dibuja_planeta(marte);
 	dibuja_planeta(jupiter);
 	dibuja_saturno();
 	dibuja_planeta(urano);
 	dibuja_planeta(neptuno);
+	dibuja_tierra();
+	
 	
 	// Se limpian los buffers
 	glutSwapBuffers();
@@ -434,7 +432,6 @@ void openGlInit() {
 	crea_textura(&venus.textura, "../texturas/venus.jpg");
 	crea_textura(&tierra.textura, "../texturas/tierra_nubes.bmp");
 	crea_textura(&luna.textura, "../texturas/luna.jpg");
-	crea_textura(&ISS.textura, "../texturas/iss.png");
 	crea_textura(&marte.textura, "../texturas/marte.jpg");
 	crea_textura(&jupiter.textura, "../texturas/jupiter.jpg");
 	crea_textura(&saturno.textura, "../texturas/saturno.jpg");
@@ -442,6 +439,7 @@ void openGlInit() {
 	crea_textura(&neptuno.textura, "../texturas/neptuno.jpg");
 	crea_textura(&anillos, "../texturas/anillos.jpg");
 	crea_textura(&fondo, "../texturas/estrellas.jpg");
+	crea_textura(&ISS.textura, "../texturas/iss.png");
 	//lista para el toro
 	toro = glGenLists(1);
 	glNewList(toro, GL_COMPILE);
