@@ -19,6 +19,7 @@ unsigned int esfera, cubo, toro;
 unsigned int anillos, fondo;
 //camara alejada predeterminada
 int camara = 1; 
+//relacion de aspecto de la ventana
 float aspecto = 1;
 //datos: distancia al sol, velocidad de traslacion, angulo de traslacion, velocidad de rotacion, angulo de rotacion, tamaño, textura y lista de geometria
 planeta sol = {0, 0, 0, 1, 0, 100, 0, &esfera};
@@ -30,9 +31,8 @@ planeta jupiter = {800, 5, 0, 15, 0, 60, 0, &esfera};
 planeta saturno = {1050, 4.4, 0, 9, 0, 50, 0, &esfera};
 planeta urano = {1250, 3.7, 26, 6, 0, 45, 0, &esfera};
 planeta neptuno = {1400, 2.5, 160, 11, 0, 45, 0, &esfera};
-
 //satelites de la tierra
-planeta luna = {80, 10, 0, 0, 225, 10, 0, &esfera};
+planeta luna = {80, 10, 0, 1, 225, 10, 0, &esfera};
 planeta ISS = {120, 15, 0, 3, 0, 9, 0, &cubo};
 
 //luces 
@@ -74,7 +74,11 @@ void crea_textura(int* textura, char* ruta) {
 	unsigned char* imagen = stbi_load(ruta, &width, &height, &nrChannels, 0);
 	if (nrChannels == 3) {
 		formato = GL_RGB;
-	}else {
+	}
+	else if (nrChannels == 1) {
+		formato = GL_RED;
+	}
+	else {
 		formato = GL_RGBA;
 	}
 
@@ -255,10 +259,11 @@ void dibuja_tierra() {
 				//rotamos alrededor de si misma
 				glRotatef(ISS.angulo_rotacion, 0, 1, 0);
 				//escalamos a su posicion
-				glScalef(2*ISS.tamano, ISS.tamano, ISS.tamano);
+				glScalef(2 * ISS.tamano, 1.3 * ISS.tamano, 2 * ISS.tamano);
 				if (get_ejes())dibuja_ejes();
 				//usamos la textura
 				glBindTexture(GL_TEXTURE_2D, ISS.textura);
+				glDisable(GL_LIGHTING);
 				glCallList(*(ISS.lista_render));
 			glPopMatrix();
 		glPopMatrix();
@@ -360,7 +365,7 @@ void Display(void) {
 	dibuja_planeta(urano);
 	dibuja_planeta(neptuno);
 	dibuja_tierra();
-	
+	if (get_luces() == 1) glEnable(GL_LIGHTING);
 	
 	// Se limpian los buffers
 	glutSwapBuffers();
@@ -403,8 +408,6 @@ void openGlInit() {
 	glEnable(GL_NORMALIZE);
 	glCullFace(GL_BACK);
 	glEnable(GL_LIGHTING);
-	glShadeModel(GL_FLAT);
-
 	//luces
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambiente);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, difusa);
@@ -424,6 +427,7 @@ void openGlInit() {
 	//texturas
 	//las habilitamos
 	glEnable(GL_TEXTURE_2D);
+	//para las texturas transparentes
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//creamos las texturas
@@ -440,6 +444,7 @@ void openGlInit() {
 	crea_textura(&anillos, "../texturas/anillos.jpg");
 	crea_textura(&fondo, "../texturas/estrellas.jpg");
 	crea_textura(&ISS.textura, "../texturas/iss.png");
+	//creamos las listas para las geometrias de los cuerpos celestes
 	//lista para el toro
 	toro = glGenLists(1);
 	glNewList(toro, GL_COMPILE);

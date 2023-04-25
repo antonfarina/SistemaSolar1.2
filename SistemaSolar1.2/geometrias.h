@@ -1,4 +1,3 @@
-
 //funcion de creacion del toro con parametros:
 //r: radio pequeño
 //R: radio grande
