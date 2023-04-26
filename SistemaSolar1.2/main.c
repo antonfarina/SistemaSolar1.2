@@ -414,13 +414,14 @@ void openGlInit() {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, especular);
 	glLightfv(GL_LIGHT0, GL_POSITION, posicion_luz);
 	//angulo de apertura del foco de la luz
-	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 179.0f);
+	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 180.0f);
 	//habilitamos la luz
 	glEnable(GL_LIGHT0);
 	//para el color
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-	glMateriali(GL_FRONT, GL_SHININESS, 1);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, especular);
+	glMateriali(GL_FRONT, GL_SHININESS, 128);
 	glEnable(GL_SMOOTH);
 	glShadeModel(GL_SMOOTH);
 
