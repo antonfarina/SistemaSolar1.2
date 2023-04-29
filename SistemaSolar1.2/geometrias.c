@@ -153,7 +153,6 @@ void arrayCubo() {
 	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-0.5f, 0.5f, 0.5f);
 	glEnd();
-	return 0;
 }
 
 void arrayEsfera(){
@@ -3759,7 +3758,5 @@ void arrayEsfera(){
 	glTexCoord2f(0.950000f, 0.100000f);
 	glVertex3f(0.0964914f, -0.950057f, -0.294893f);
 	glEnd();
-
-	return 0;
 }
 
