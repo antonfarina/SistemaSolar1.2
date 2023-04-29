@@ -51,6 +51,9 @@ void cambio_camara() {
 	}else if (camara == 5 || camara == 6) {
 		//telescopio a satelites desde la tierra
 		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, planetas[camara - 2].distancia_sol, planetas[camara - 2].angulo_traslacion, 1, aspecto);
+	}else if(camara == 12 || camara == 13){
+		//satelites a la tierra
+		telescopio(planetas[camara-9].distancia_sol, planetas[camara - 9].angulo_traslacion, tierra.distancia_sol, tierra.angulo_traslacion, 2, aspecto);
 	}else {
 		telescopio(tierra.distancia_sol, tierra.angulo_traslacion, planetas[camara - 2].distancia_sol, planetas[camara - 2].angulo_traslacion, 0, aspecto);
 	}
@@ -313,16 +316,18 @@ void menu(void) {
 	int menu;
 	menu = glutCreateMenu(usar_menu);
 	glutAddMenuEntry("Alejada", 1);
-	glutAddMenuEntry("Sol", 2);
-	glutAddMenuEntry("Mercurio", 3);
-	glutAddMenuEntry("Venus", 4);
-	glutAddMenuEntry("Luna", 5);
-	glutAddMenuEntry("ISS", 6);
-	glutAddMenuEntry("Marte", 7);
-	glutAddMenuEntry("Jupiter", 8);
-	glutAddMenuEntry("Saturno", 9);
-	glutAddMenuEntry("Urano", 10);
-	glutAddMenuEntry("Neptuno", 11);
+	glutAddMenuEntry("Tierra al Sol", 2);
+	glutAddMenuEntry("Tierra a Mercurio", 3);
+	glutAddMenuEntry("Tierra a Venus", 4);
+	glutAddMenuEntry("Tierra a la Luna", 5);
+	glutAddMenuEntry("Tierra a la ISS", 6);
+	glutAddMenuEntry("Tierra a Marte", 7);
+	glutAddMenuEntry("Tierra a Jupiter", 8);
+	glutAddMenuEntry("Tierra a Saturno", 9);
+	glutAddMenuEntry("Tierra a Urano", 10);
+	glutAddMenuEntry("Tierra a Neptuno", 11);
+	glutAddMenuEntry("Luna a la Tierra", 12);
+	glutAddMenuEntry("ISS a la Tierra", 13);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 // Función de display

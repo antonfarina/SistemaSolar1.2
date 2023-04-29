@@ -37,7 +37,7 @@ int get_luces();
 //funcion que modifica la vision en funcion de las teclas
 void camaraAlejada(float aspecto);
 //funcion que enfoca la camara a un planeta desde el planeta tierra
-void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite, float aspecto);
+void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, unsigned int satelite, float aspecto);
 //funcion de captura el teclado
 void teclas(unsigned char c, int x, int y);
 //funcion de captura de las teclas especiales

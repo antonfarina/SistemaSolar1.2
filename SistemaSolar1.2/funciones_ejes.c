@@ -24,7 +24,7 @@ void camaraAlejada(float aspecto) {
 	gluLookAt(((float)DISTANCIA * 1.5 * zoom * (float)sin(alfa) * cos(beta)), ((float)DISTANCIA * 1.5 * zoom * (float)sin(beta)),((float)DISTANCIA * 1.5 * zoom * cos(alfa) * cos(beta)), 0, 0, 0, 0, cos(beta), 0);
 }
 
-void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, int satelite, float aspecto){
+void telescopio(float distancia_visor, float angulo_visor, float distancia_visto, float angulo_visto, unsigned int satelite, float aspecto){
 	//matriz de proyeccion
 	glMatrixMode(GL_PROJECTION);
 	//cargamos la identidad
@@ -32,10 +32,18 @@ void telescopio(float distancia_visor, float angulo_visor, float distancia_visto
 	//perspectiva con aspecto
 	gluPerspective(45, aspecto, 1, DISTANCIA * 6);
 	//comprobamos si es un satelite o no
-	if (satelite) {
-		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), distancia_visto * cos((angulo_visto + angulo_visor) * PI / 180) + distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visto * sin((angulo_visto + angulo_visor) * PI / 180) - distancia_visor * sin(angulo_visor * PI / 180), 0, 1, 0);
-	} else {
-		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180), 0, -distancia_visor * sin(angulo_visor * PI / 180), distancia_visto * cos(angulo_visto * PI / 180), 0, -1 * distancia_visto * sin(angulo_visto * PI / 180), 0, 1, 0);
+	switch (satelite){
+	case 0://Tierra a cualquier planeta
+		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180.0), 0, -distancia_visor * sin(angulo_visor * PI / 180.0), distancia_visto * cos(angulo_visto * PI / 180.0), 0, -1 * distancia_visto * sin(angulo_visto * PI / 180.0), 0, 1, 0);
+		break;
+	case 1://Tierra a sus satélites
+		gluLookAt(distancia_visor * cos(angulo_visor * PI / 180.0), 0, -distancia_visor * sin(angulo_visor * PI / 180.0), distancia_visto * cos((angulo_visto + angulo_visor) * PI / 180.0) + distancia_visor * cos(angulo_visor * PI / 180.0), 0, -distancia_visto * sin((angulo_visto + angulo_visor) * PI / 180.0) - distancia_visor * sin(angulo_visor * PI / 180.0), 0, 1, 0);
+		break;
+	case 2://Satélites a la Tierra
+		gluLookAt(distancia_visor*cos((angulo_visor+angulo_visto)* PI / 180.0)+distancia_visto*cos(angulo_visto*PI/180.0),0, -distancia_visor * sin((angulo_visor + angulo_visto) * PI / 180.0) - distancia_visto * sin(angulo_visto * PI / 180.0),distancia_visto*cos(angulo_visto*PI/180.0),0,-distancia_visto * sin(angulo_visto * PI / 180.0), 0, 1, 0);
+		break;
+	default:
+		break;
 	}
 }
 
